@@ -32,10 +32,11 @@ export async function startCli(cwd = process.cwd(), argv = process.argv) {
     const output = args[3] || DEFAULT_FILE_NAME;
     const title = args[5] || 'Markdown to HTML';
     const githubCornor = args[7] || 'Markdown to HTML';
+    const isTwoSlash = args[9] || false;
 
     const md = fs.readFileSync(input, 'utf8');
 
-    const content = await markdownToDocs(md, title, githubCornor, false);
+    const content = await markdownToDocs(md, title, githubCornor, !!isTwoSlash);
 
     fs.writeFileSync(path.resolve(cwd, output), content);
 

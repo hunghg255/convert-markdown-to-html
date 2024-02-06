@@ -126,7 +126,7 @@ export const markdownToDocs = async (
 
   ol,
   ul {
-    list-style: none;
+    padding: 0 26px;
   }
 
   blockquote,
@@ -761,14 +761,6 @@ hyphens: none; */
 </style>
 
 <style>
-  body,
-  html {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    cursor: default;
-  }
-
   main {
     max-width: 890px;
     margin: 0 auto;

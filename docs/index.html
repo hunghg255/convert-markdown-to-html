@@ -1,593 +1,595 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Convert Markdown to HTML</title>
 
   <style>
-    html,
-    body,
-    div,
-    span,
-    applet,
-    object,
-    iframe,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    blockquote,
-    pre,
-    a,
-    abbr,
-    acronym,
-    address,
-    big,
-    cite,
-    code,
-    del,
-    dfn,
-    em,
-    img,
-    ins,
-    kbd,
-    q,
-    s,
-    samp,
-    small,
-    strike,
-    strong,
-    sub,
-    sup,
-    tt,
-    var,
-    b,
-    u,
-    i,
-    center,
-    dl,
-    dt,
-    dd,
-    ol,
-    ul,
-    li,
-    fieldset,
-    form,
-    label,
-    legend,
-    table,
-    caption,
-    tbody,
-    tfoot,
-    thead,
-    tr,
-    th,
-    td,
-    article,
-    aside,
-    canvas,
-    details,
-    embed,
-    figure,
-    figcaption,
-    footer,
-    header,
-    hgroup,
-    menu,
-    nav,
-    output,
-    ruby,
-    section,
-    summary,
-    time,
-    mark,
-    audio,
-    video {
-      margin: 0;
-      padding: 0;
-      border: 0;
-      font-size: 100%;
-      vertical-align: baseline;
-    }
-
-    /* HTML5 display-role reset for older browsers */
-    article,
-    aside,
-    details,
-    figcaption,
-    figure,
-    footer,
-    header,
-    hgroup,
-    menu,
-    nav,
-    section {
-      display: block;
-    }
-
-    body {
-      line-height: 1;
-    }
-
-    ol,
-    ul {
-      list-style: none;
-    }
-
-    blockquote,
-    q {
-      quotes: none;
-    }
-
-    blockquote:before,
-    blockquote:after,
-    q:before,
-    q:after {
-      content: '';
-      content: none;
-    }
-
-    table {
-      border-collapse: collapse;
-      border-spacing: 0;
-    }
-
-    a,
-    a:hover,
-    a:active,
-    a:focus {
-      color: inherit;
-    }
-  </style>
-
-  <style>
-    .has-diff {
-      position: relative;
-    }
-
-    .has-diff .line {
-      display: inline-block;
-      width: 100%;
-    }
-
-    .has-diff .diff {
-      margin: 0 -24px;
-      padding: 0 24px;
-      width: calc(100% + 48px);
-      display: inline-block;
-    }
-
-    .has-diff code .line:last-child {
-      display: none;
-    }
-
-    .has-diff .diff.add {
-      background-color: #0505;
-    }
-
-    .has-diff .diff.remove {
-      background-color: #8005;
-    }
-
-    .has-diff .diff:before {
-      position: absolute;
-      left: 0;
-      padding-left: 6px;
-    }
-
-    .has-diff .diff.add:before {
-      content: '+';
-      color: #3dd68c;
-      border-left: 1px solid #10b981;
-    }
-
-    .has-diff .diff.remove:before {
-      content: '-';
-      color: #cb7676;
-      border-left: 1px solid #f43f5e;
-    }
-
-    .has-highlighted .line.highlighted {
-      background-color: rgba(101, 117, 133, 0.16);
-      margin: 0 -24px;
-      padding: 0 24px;
-      width: calc(100% + 48px);
-      display: inline-block;
-    }
-
-    .has-highlighted .line.highlighted.error {
-      background-color: rgba(244, 63, 94, 0.16);
-    }
-
-    .has-highlighted .line.highlighted.warning {
-      background-color: rgba(234, 179, 8, 0.16);
-    }
-
-    .has-focused .line:not(.focused) {
-      filter: blur(0.095rem);
-      opacity: 0.4;
-      transition:
-        filter 0.35s,
-        opacity 0.35s;
-    }
-
-    .has-focused:hover .line:not(.focused) {
-      filter: blur(0);
-      opacity: 1;
-    }
-  </style>
-
-  <style>
-    :root {
-      --background: #050505;
-      --primary: #fff;
-      --secondary: #ccc;
-      --tertiary: #7d7d7d;
-      --accent: #f09000;
-      --red: #fc533e;
-      --font-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, 'andale mono',
-        monospace !important;
-      --highlight-color: #f25f4c;
-    }
-
-    * {
-      box-sizing: border-box;
-      font-family: var(--font-mono);
-    }
-
-    a {
-      color: var(--accent);
-    }
-
-    a:hover {
-      color: var(--highlight-color);
-    }
-
-    body {
-      margin: 0;
-      background-color: var(--background);
-      color: var(--primary);
-      line-height: 24px;
-      font-size: 16px;
-      font-weight: 400;
-      font-synthesis: style;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-      border-radius: 4px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      background: #492c00b3;
-      border-radius: 4px;
-      transition: all 300ms ease-in-out;
-    }
-
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--accent);
-      transition: all 300ms;
-    }
-  </style>
-
-  <style>
-    /* ===== Basic ===== */
-    :root {
-      --twoslash-border-color: #8888885d;
-      --twoslash-jsdoc-color: #fff;
-      --twoslash-underline-color: currentColor;
-      --twoslash-popup-bg: #0f0f0f;
-      --twoslash-popup-shadow: rgba(0, 0, 0, 0.08) 0px 1px 4px;
-      --twoslash-matched-color: inherit;
-      --twoslash-unmatched-color: #888;
-      --twoslash-cursor-color: #8888;
-      --twoslash-error-color: #d45656;
-      --twoslash-error-bg: #d4565620;
-      --twoslash-tag-color: #3772cf;
-      --twoslash-tag-bg: #3772cf20;
-      --twoslash-tag-warn-color: #c37d0d;
-      --twoslash-tag-warn-bg: #c37d0d20;
-      --twoslash-tag-annotate-color: #1ba673;
-      --twoslash-tag-annotate-bg: #1ba67320;
-    }
-
-    /* Respect people's wishes to not have animations */
-    @media (prefers-reduced-motion: reduce) {
-      .twoslash * {
-        transition: none !important;
-      }
-    }
-
-    /* ===== Hover Info ===== */
-    .twoslash:hover .twoslash-hover {
-      border-color: var(--twoslash-underline-color);
-    }
-
-    .twoslash .twoslash-hover {
-      border-bottom: 1px dotted transparent;
-      transition-timing-function: ease;
-      transition: border-color 0.3s;
-      position: relative;
-    }
-
-    .twoslash .twoslash-popup-container {
-      position: absolute;
-      top: 2px;
-      opacity: 0;
-      display: inline-block;
-      transform: translateY(1.1em);
-      background: var(--twoslash-popup-bg);
-      border: 1px solid var(--twoslash-border-color);
-      transition: opacity 0.3s;
-      border-radius: 4px;
-      padding: 4px 6px;
-      pointer-events: none;
-      z-index: 10;
-      user-select: none;
-      text-align: left;
-      box-shadow: var(--twoslash-popup-shadow);
-    }
-
-    .twoslash .twoslash-query-presisted .twoslash-popup-container {
-      z-index: 9;
-      transform: translateY(1.5em);
-    }
-
-    .twoslash .twoslash-hover:hover .twoslash-popup-container,
-    .twoslash .twoslash-query-presisted .twoslash-popup-container {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .twoslash .twoslash-popup-container:hover {
-      user-select: auto;
-    }
-
-    .twoslash .twoslash-popup-arrow {
-      position: absolute;
-      top: -4px;
-      left: 1em;
-      border-top: 1px solid var(--twoslash-border-color);
-      border-right: 1px solid var(--twoslash-border-color);
-      background: var(--twoslash-popup-bg);
-      transform: rotate(-45deg);
-      width: 6px;
-      height: 6px;
-      pointer-events: none;
-    }
-
-    .twoslash .twoslash-popup-docs {
-      color: var(--twoslash-jsdoc-color);
-      padding: 6px 10px 2px;
-      font-family: sans-serif;
-      font-size: 0.8em;
-      margin: 0 -6px;
-      border-top: 1px solid var(--twoslash-border-color);
-    }
-
-    .twoslash.twoslash h1,
-    .twoslash.twoslash h2,
-    .twoslash.twoslash h3,
-    .twoslash.twoslash h4,
-    .twoslash.twoslash h5,
-    .twoslash.twoslash h6,
-    .twoslash.twoslash p {
-      margin: 0;
-      padding: 0;
-      font-weight: normal;
-      font-family: inherit;
-    }
-
-    .twoslash.twoslash a:hover {
-      background-color: initial !important;
-    }
-
-    /* ===== Error Line ===== */
-    .twoslash .twoslash-error-line {
-      position: relative;
-      background-color: var(--twoslash-error-bg);
-      border-left: 3px solid var(--twoslash-error-color);
-      color: var(--twoslash-error-color);
-      padding: 6px 6px;
-      margin: 0.2em 0;
-    }
-
-    .twoslash .twoslash-error {
-      background: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%206%203'%20enable-background%3D'new%200%200%206%203'%20height%3D'3'%20width%3D'6'%3E%3Cg%20fill%3D'%23c94824'%3E%3Cpolygon%20points%3D'5.5%2C0%202.5%2C3%201.1%2C3%204.1%2C0'%2F%3E%3Cpolygon%20points%3D'4%2C0%206%2C2%206%2C0.6%205.4%2C0'%2F%3E%3Cpolygon%20points%3D'0%2C2%201%2C3%202.4%2C3%200%2C0.6'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") repeat-x bottom left;
-      padding-bottom: 2px;
-    }
-
-    /* ===== Completeions ===== */
-    .twoslash .twoslash-completions-list {
-      position: relative;
-    }
-
-    .twoslash .twoslash-completions-list ul {
-      user-select: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translate(0, 1.2em);
-      display: inline-block;
-      width: 240px;
-      background: var(--twoslash-popup-bg);
-      border: 1px solid var(--twoslash-border-color);
-      font-size: 0.8rem;
-      margin: 3px 0 0 -1px;
-      padding: 4px;
-      z-index: 8;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      box-shadow: var(--twoslash-popup-shadow);
-    }
-
-    .twoslash .twoslash-completions-list ul:hover {
-      user-select: auto;
-    }
-
-    .twoslash .twoslash-completions-list ul::before {
-      background-color: var(--twoslash-cursor-color);
-      width: 2px;
-      position: absolute;
-      top: -1.6em;
-      height: 1.4em;
-      left: -1px;
-      content: ' ';
-    }
-
-    .twoslash .twoslash-completions-list ul li {
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      gap: 0.25em;
-      line-height: 1em;
-    }
-
-    .twoslash .twoslash-completions-list ul li span.twoslash-completions-unmatched {
-      color: var(--twoslash-unmatched-color);
-    }
-
-    .twoslash .twoslash-completions-list ul .deprecated {
-      text-decoration: line-through;
-      opacity: 0.5;
-    }
-
-    .twoslash .twoslash-completions-list ul li span.twoslash-completions-matched {
-      color: var(--twoslash-matched-color);
-    }
-
-    /* Icons */
-    .twoslash .twoslash-completions-list .twoslash-completions-icon {
-      color: var(--twoslash-unmatched-color);
-      width: 1em;
-      flex: none;
-    }
-
-    /* Custom Tags */
-    .twoslash .twoslash-tag-line {
-      position: relative;
-      background-color: var(--twoslash-tag-bg);
-      border-left: 3px solid var(--twoslash-tag-color);
-      color: var(--twoslash-tag-color);
-      padding: 6px 6px;
-      margin: 0.2em 0;
-      display: flex;
-      align-items: center;
-      gap: 0.3em;
-    }
-
-    .twoslash .twoslash-tag-line .twoslash-tag-icon {
-      width: 1.1em;
-      color: inherit;
-    }
-
-    .twoslash .twoslash-tag-line.twoslash-tag-error-line {
-      background-color: var(--twoslash-error-bg);
-      border-left: 3px solid var(--twoslash-error-color);
-      color: var(--twoslash-error-color);
-    }
-
-    .twoslash .twoslash-tag-line.twoslash-tag-warn-line {
-      background-color: var(--twoslash-tag-warn-bg);
-      border-left: 3px solid var(--twoslash-tag-warn-color);
-      color: var(--twoslash-tag-warn-color);
-    }
-
-    .twoslash .twoslash-tag-line.twoslash-tag-annotate-line {
-      background-color: var(--twoslash-tag-annotate-bg);
-      border-left: 3px solid var(--twoslash-tag-annotate-color);
-      color: var(--twoslash-tag-annotate-color);
-    }
-  </style>
-
-  <style>
-    .code-blocks {
-      position: relative;
-    }
-
-    .code-blocks-title {
-      border-radius: 6px;
-      background-color: #090909;
-    }
-
-    .code-blocks-title h5 {
-      margin: 0;
-      padding: 4px;
-      color: #878787;
-      border-bottom: 1px solid #505050;
-      font-size: 12px;
-      font-style: italic;
-    }
-
-    .code-blocks-pre {
-      position: relative;
-      margin: 0 0 16px;
-    }
-
-    .code-blocks-lang {
-      position: absolute;
-      top: 0;
-      right: 10px;
-      z-index: 1;
-      font-size: 10px;
-      color: #ff9e0466;
-    }
-
-    .btn-copy {
-      opacity: 0;
-      cursor: pointer;
-      transition: all 300ms ease-in-out;
-      background-color: transparent;
-      padding: 0;
-      margin: 0;
-      border: 1px solid #555555;
-      background-color: #110e0e;
-      border-radius: 4px;
-      outline: none;
-      position: absolute;
-      z-index: 1;
-      top: 10px;
-      right: 10px;
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .code-blocks:hover .btn-copy {
-      opacity: 1;
-    }
-
-    .btn-copy svg {
-      width: 16px;
-    }
-
-    .code-blocks pre {
-      position: relative;
-      padding: 24px 0;
-      overflow-x: auto;
-      background-color: #090909 !important;
-      --shiki-dark-bg: #090909;
-      --shiki-dark: #dbd7caee;
-      border-radius: 6px;
-      /* background: transparent;
+  html,
+  body,
+  div,
+  span,
+  applet,
+  object,
+  iframe,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  pre,
+  a,
+  abbr,
+  acronym,
+  address,
+  big,
+  cite,
+  code,
+  del,
+  dfn,
+  em,
+  img,
+  ins,
+  kbd,
+  q,
+  s,
+  samp,
+  small,
+  strike,
+  strong,
+  sub,
+  sup,
+  tt,
+  var,
+  b,
+  u,
+  i,
+  center,
+  dl,
+  dt,
+  dd,
+  ol,
+  ul,
+  li,
+  fieldset,
+  form,
+  label,
+  legend,
+  table,
+  caption,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td,
+  article,
+  aside,
+  canvas,
+  details,
+  embed,
+  figure,
+  figcaption,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  output,
+  ruby,
+  section,
+  summary,
+  time,
+  mark,
+  audio,
+  video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+  }
+
+  /* HTML5 display-role reset for older browsers */
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  section {
+    display: block;
+  }
+
+  body {
+    line-height: 1;
+  }
+
+  ol,
+  ul {
+    padding: 0 26px;
+  }
+
+  blockquote,
+  q {
+    quotes: none;
+  }
+
+  blockquote:before,
+  blockquote:after,
+  q:before,
+  q:after {
+    content: '';
+    content: none;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  a,
+  a:hover,
+  a:active,
+  a:focus {
+    color: inherit;
+  }
+</style>
+
+<style>
+  .has-diff {
+    position: relative;
+  }
+
+  .has-diff .line {
+    display: inline-block;
+    width: 100%;
+  }
+
+  .has-diff .diff {
+    margin: 0 -24px;
+    padding: 0 24px;
+    width: calc(100% + 48px);
+    display: inline-block;
+  }
+
+  .has-diff code .line:last-child {
+    display: none;
+  }
+
+  .has-diff .diff.add {
+    background-color: #0505;
+  }
+
+  .has-diff .diff.remove {
+    background-color: #8005;
+  }
+
+  .has-diff .diff:before {
+    position: absolute;
+    left: 0;
+    padding-left: 6px;
+  }
+
+  .has-diff .diff.add:before {
+    content: '+';
+    color: #3dd68c;
+    border-left: 1px solid #10b981;
+  }
+
+  .has-diff .diff.remove:before {
+    content: '-';
+    color: #cb7676;
+    border-left: 1px solid #f43f5e;
+  }
+
+  .has-highlighted .line.highlighted {
+    background-color: rgba(101, 117, 133, 0.16);
+    margin: 0 -24px;
+    padding: 0 24px;
+    width: calc(100% + 48px);
+    display: inline-block;
+  }
+
+  .has-highlighted .line.highlighted.error {
+    background-color: rgba(244, 63, 94, 0.16);
+  }
+
+  .has-highlighted .line.highlighted.warning {
+    background-color: rgba(234, 179, 8, 0.16);
+  }
+
+  .has-focused .line:not(.focused) {
+    filter: blur(0.095rem);
+    opacity: 0.4;
+    transition:
+      filter 0.35s,
+      opacity 0.35s;
+  }
+
+  .has-focused:hover .line:not(.focused) {
+    filter: blur(0);
+    opacity: 1;
+  }
+</style>
+
+<style>
+
+:root {
+  --background: #050505;
+  --primary: #fff;
+  --secondary: #ccc;
+  --tertiary: #7d7d7d;
+  --accent: #f09000;
+  --red: #fc533e;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, 'andale mono',
+    monospace !important;
+  --highlight-color: #f25f4c;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: var(--font-mono);
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--highlight-color);
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--primary);
+  line-height: 24px;
+  font-size: 16px;
+  font-weight: 400;
+  font-synthesis: style;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  border-radius: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #492c00b3;
+  border-radius: 4px;
+  transition: all 300ms ease-in-out;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+  transition: all 300ms;
+}
+
+</style>
+
+<style>
+  /* ===== Basic ===== */
+  :root {
+    --twoslash-border-color: #8888885d;
+    --twoslash-jsdoc-color: #fff;
+    --twoslash-underline-color: currentColor;
+    --twoslash-popup-bg: #0f0f0f;
+    --twoslash-popup-shadow: rgba(0, 0, 0, 0.08) 0px 1px 4px;
+    --twoslash-matched-color: inherit;
+    --twoslash-unmatched-color: #888;
+    --twoslash-cursor-color: #8888;
+    --twoslash-error-color: #d45656;
+    --twoslash-error-bg: #d4565620;
+    --twoslash-tag-color: #3772cf;
+    --twoslash-tag-bg: #3772cf20;
+    --twoslash-tag-warn-color: #c37d0d;
+    --twoslash-tag-warn-bg: #c37d0d20;
+    --twoslash-tag-annotate-color: #1ba673;
+    --twoslash-tag-annotate-bg: #1ba67320;
+  }
+
+  /* Respect people's wishes to not have animations */
+  @media (prefers-reduced-motion: reduce) {
+    .twoslash * {
+      transition: none !important;
+    }
+  }
+
+  /* ===== Hover Info ===== */
+  .twoslash:hover .twoslash-hover {
+    border-color: var(--twoslash-underline-color);
+  }
+
+  .twoslash .twoslash-hover {
+    border-bottom: 1px dotted transparent;
+    transition-timing-function: ease;
+    transition: border-color 0.3s;
+    position: relative;
+  }
+
+  .twoslash .twoslash-popup-container {
+    position: absolute;
+    top: 2px;
+    opacity: 0;
+    display: inline-block;
+    transform: translateY(1.1em);
+    background: var(--twoslash-popup-bg);
+    border: 1px solid var(--twoslash-border-color);
+    transition: opacity 0.3s;
+    border-radius: 4px;
+    padding: 4px 6px;
+    pointer-events: none;
+    z-index: 10;
+    user-select: none;
+    text-align: left;
+    box-shadow: var(--twoslash-popup-shadow);
+  }
+
+  .twoslash .twoslash-query-presisted .twoslash-popup-container {
+    z-index: 9;
+    transform: translateY(1.5em);
+  }
+
+  .twoslash .twoslash-hover:hover .twoslash-popup-container,
+  .twoslash .twoslash-query-presisted .twoslash-popup-container {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .twoslash .twoslash-popup-container:hover {
+    user-select: auto;
+  }
+
+  .twoslash .twoslash-popup-arrow {
+    position: absolute;
+    top: -4px;
+    left: 1em;
+    border-top: 1px solid var(--twoslash-border-color);
+    border-right: 1px solid var(--twoslash-border-color);
+    background: var(--twoslash-popup-bg);
+    transform: rotate(-45deg);
+    width: 6px;
+    height: 6px;
+    pointer-events: none;
+  }
+
+  .twoslash .twoslash-popup-docs {
+    color: var(--twoslash-jsdoc-color);
+    padding: 6px 10px 2px;
+    font-family: sans-serif;
+    font-size: 0.8em;
+    margin: 0 -6px;
+    border-top: 1px solid var(--twoslash-border-color);
+  }
+
+  .twoslash.twoslash h1,
+  .twoslash.twoslash h2,
+  .twoslash.twoslash h3,
+  .twoslash.twoslash h4,
+  .twoslash.twoslash h5,
+  .twoslash.twoslash h6,
+  .twoslash.twoslash p {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    font-family: inherit;
+  }
+
+  .twoslash.twoslash a:hover {
+    background-color: initial !important;
+  }
+
+  /* ===== Error Line ===== */
+  .twoslash .twoslash-error-line {
+    position: relative;
+    background-color: var(--twoslash-error-bg);
+    border-left: 3px solid var(--twoslash-error-color);
+    color: var(--twoslash-error-color);
+    padding: 6px 6px;
+    margin: 0.2em 0;
+  }
+
+  .twoslash .twoslash-error {
+    background: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%206%203'%20enable-background%3D'new%200%200%206%203'%20height%3D'3'%20width%3D'6'%3E%3Cg%20fill%3D'%23c94824'%3E%3Cpolygon%20points%3D'5.5%2C0%202.5%2C3%201.1%2C3%204.1%2C0'%2F%3E%3Cpolygon%20points%3D'4%2C0%206%2C2%206%2C0.6%205.4%2C0'%2F%3E%3Cpolygon%20points%3D'0%2C2%201%2C3%202.4%2C3%200%2C0.6'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") repeat-x bottom left;
+    padding-bottom: 2px;
+  }
+
+  /* ===== Completeions ===== */
+  .twoslash .twoslash-completions-list {
+    position: relative;
+  }
+
+  .twoslash .twoslash-completions-list ul {
+    user-select: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(0, 1.2em);
+    display: inline-block;
+    width: 240px;
+    background: var(--twoslash-popup-bg);
+    border: 1px solid var(--twoslash-border-color);
+    font-size: 0.8rem;
+    margin: 3px 0 0 -1px;
+    padding: 4px;
+    z-index: 8;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: var(--twoslash-popup-shadow);
+  }
+
+  .twoslash .twoslash-completions-list ul:hover {
+    user-select: auto;
+  }
+
+  .twoslash .twoslash-completions-list ul::before {
+    background-color: var(--twoslash-cursor-color);
+    width: 2px;
+    position: absolute;
+    top: -1.6em;
+    height: 1.4em;
+    left: -1px;
+    content: ' ';
+  }
+
+  .twoslash .twoslash-completions-list ul li {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+    line-height: 1em;
+  }
+
+  .twoslash .twoslash-completions-list ul li span.twoslash-completions-unmatched {
+    color: var(--twoslash-unmatched-color);
+  }
+
+  .twoslash .twoslash-completions-list ul .deprecated {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+
+  .twoslash .twoslash-completions-list ul li span.twoslash-completions-matched {
+    color: var(--twoslash-matched-color);
+  }
+
+  /* Icons */
+  .twoslash .twoslash-completions-list .twoslash-completions-icon {
+    color: var(--twoslash-unmatched-color);
+    width: 1em;
+    flex: none;
+  }
+
+  /* Custom Tags */
+  .twoslash .twoslash-tag-line {
+    position: relative;
+    background-color: var(--twoslash-tag-bg);
+    border-left: 3px solid var(--twoslash-tag-color);
+    color: var(--twoslash-tag-color);
+    padding: 6px 6px;
+    margin: 0.2em 0;
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  .twoslash .twoslash-tag-line .twoslash-tag-icon {
+    width: 1.1em;
+    color: inherit;
+  }
+
+  .twoslash .twoslash-tag-line.twoslash-tag-error-line {
+    background-color: var(--twoslash-error-bg);
+    border-left: 3px solid var(--twoslash-error-color);
+    color: var(--twoslash-error-color);
+  }
+
+  .twoslash .twoslash-tag-line.twoslash-tag-warn-line {
+    background-color: var(--twoslash-tag-warn-bg);
+    border-left: 3px solid var(--twoslash-tag-warn-color);
+    color: var(--twoslash-tag-warn-color);
+  }
+
+  .twoslash .twoslash-tag-line.twoslash-tag-annotate-line {
+    background-color: var(--twoslash-tag-annotate-bg);
+    border-left: 3px solid var(--twoslash-tag-annotate-color);
+    color: var(--twoslash-tag-annotate-color);
+  }
+</style>
+
+<style>
+  .code-blocks {
+    position: relative;
+  }
+
+  .code-blocks-title {
+    border-radius: 6px;
+    background-color: #090909;
+  }
+
+  .code-blocks-title h5 {
+    margin: 0;
+    padding: 4px;
+    color: #878787;
+    border-bottom: 1px solid #505050;
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  .code-blocks-pre {
+    position: relative;
+    margin: 0 0 16px;
+  }
+
+  .code-blocks-lang {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    z-index: 1;
+    font-size: 10px;
+    color: #ff9e0466;
+  }
+
+  .btn-copy {
+    opacity: 0;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #555555;
+    background-color: #110e0e;
+    border-radius: 4px;
+    outline: none;
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .code-blocks:hover .btn-copy {
+    opacity: 1;
+  }
+
+  .btn-copy svg {
+    width: 16px;
+  }
+
+  .code-blocks pre {
+    position: relative;
+    padding: 24px 0;
+    overflow-x: auto;
+    background-color: #090909 !important;
+    --shiki-dark-bg: #090909;
+    --shiki-dark: #dbd7caee;
+    border-radius: 6px;
+    /* background: transparent;
 overflow: overlay;
 direction: ltr;
 text-align: left;
@@ -602,300 +604,269 @@ tab-size: 4;
 -moz-hyphens: none;
 -ms-hyphens: none;
 hyphens: none; */
-    }
+  }
 
-    .code-blocks pre>code {
-      padding: 0 24px;
-      display: block;
-    }
+  .code-blocks pre>code {
+    padding: 0 24px;
+    display: block;
+  }
 
-    .code-blocks pre .line {
-      /* line-height: 1.7; */
-      font-size: 14px !important;
-    }
+  .code-blocks pre .line {
+    /* line-height: 1.7; */
+    font-size: 14px !important;
+  }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    p,
-    ul {
-      margin: 0 0 16px;
-    }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  p,
+  ul {
+    margin: 0 0 16px;
+  }
 
-    h1 {
-      font-size: 34px;
-      line-height: 46px;
-    }
+  h1 {
+    font-size: 34px;
+    line-height: 46px;
+  }
 
-    h2 {
-      font-size: 26px;
-      line-height: 36px;
-    }
+  h2 {
+    font-size: 26px;
+    line-height: 36px;
+  }
 
-    h3 {
-      font-size: 22px;
-      line-height: 30px;
-    }
+  h3 {
+    font-size: 22px;
+    line-height: 30px;
+  }
 
-    h4 {
-      font-size: 20px;
-      line-height: 28px;
-    }
+  h4 {
+    font-size: 20px;
+    line-height: 28px;
+  }
 
-    h5 {
-      font-size: 18px;
-      line-height: 26px;
-    }
+  h5 {
+    font-size: 18px;
+    line-height: 26px;
+  }
 
-    h6 {
-      font-size: 16px;
-      line-height: 24px;
-    }
+  h6 {
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    p {
-      font-size: 14px;
-      line-height: 22px;
-    }
+  p {
+    font-size: 14px;
+    line-height: 22px;
+  }
 
-    h1 code,
-    h2 code,
-    h3 code,
-    h4 code,
-    h5 code,
-    p code,
-    ul code {
-      background: #343434 !important;
-      border-radius: 4px;
-      padding: 4px;
-    }
+  h1 code,
+  h2 code,
+  h3 code,
+  h4 code,
+  h5 code,
+  p code,
+  ul code {
+    background: #343434 !important;
+    border-radius: 4px;
+    padding: 4px;
+  }
 
-    details {
-      border-radius: 6px;
-      margin-bottom: 16px;
-      background-color: #333;
-      padding-bottom: 1px;
-    }
+  details {
+    border-radius: 6px;
+    margin-bottom: 16px;
+    background-color: #333;
+    padding-bottom: 1px;
+  }
 
-    summary {
-      background-color: #555;
-      padding: 10px;
-      cursor: pointer;
-      outline: none;
-      border-radius: 6px;
-      user-select: none;
-    }
+  summary {
+    background-color: #555;
+    padding: 10px;
+    cursor: pointer;
+    outline: none;
+    border-radius: 6px;
+    user-select: none;
+  }
 
-    details[open] summary {
-      background-color: #666;
-    }
+  details[open] summary {
+    background-color: #666;
+  }
 
-    details>p,
-    details>h4 {
-      padding: 0 10px;
-    }
+  details>p,
+  details>h4 {
+    padding: 0 10px;
+  }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-      border: 1px solid #848484;
-    }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border: 1px solid #848484;
+  }
 
-    table img {
-      width: initial;
-    }
+  table img {
+    width: initial;
+  }
 
-    th,
-    td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #848484;
-    }
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #848484;
+  }
 
-    thead th:not(:last-child),
-    tbody td:not(:last-child) {
-      border-right: 1px solid #848484;
-    }
+  thead th:not(:last-child),
+  tbody td:not(:last-child) {
+    border-right: 1px solid #848484;
+  }
 
-    th {
-      background-color: #232121;
-    }
+  th {
+    background-color: #232121;
+  }
 
-    tr:hover {
-      background-color: #232121;
-    }
+  tr:hover {
+    background-color: #232121;
+  }
 
-    .anchor {
-      margin-right: 8px;
-    }
+  .anchor {
+    margin-right: 8px;
+  }
 
-    .opacity-0 {
-      opacity: 0;
-    }
+  .opacity-0 {
+    opacity: 0;
+  }
 
-    .markdown-group-tab {
-      margin: 0 0 8px;
-    }
+  .markdown-group-tab {
+    margin: 0 0 8px;
+  }
 
-    .markdown-code-group .code-blocks-group {
-      display: none;
-    }
+  .markdown-code-group .code-blocks-group {
+    display: none;
+  }
 
-    .markdown-code-group .code-blocks-group.active {
-      display: block;
-    }
-  </style>
+  .markdown-code-group .code-blocks-group.active {
+    display: block;
+  }
+</style>
 
-  <style>
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      cursor: default;
-    }
+<style>
+  main {
+    max-width: 890px;
+    margin: 0 auto;
+    padding: 48px 10px;
+  }
 
-    main {
-      max-width: 890px;
-      margin: 0 auto;
-      padding: 48px 10px;
-    }
+  .katex * {
+    font-family: initial !important;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css">
 
-    .katex * {
-      font-family: initial !important;
-    }
-  </style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-light.css">
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-dark-media.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-base.css">
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-light.css">
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-dark-media.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-base.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-colors-light.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-colors-dark-media.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-base.css">
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-colors-light.css">
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-colors-dark-media.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-base.css">
-
-  <script type="module" src="https://unpkg.com/@uiw/github-corners/lib/index.js?module"></script>
+<script type="module" src="https://unpkg.com/@uiw/github-corners/lib/index.js?module"></script>
 </head>
-
 <body>
-  <github-corners target="__blank" position="fixed"
-    href="https://github.com/hunghg255/convert-markdown-to-html"></github-corners>
+<github-corners target="__blank" position="fixed"
+href="https://github.com/hunghg255/convert-markdown-to-html"></github-corners>
 
   <main>
     <p align="center">
-      <a href="https://www.npmjs.com/package/convert-markdown-to-html" target="_blank" rel="noopener noreferrer">
-        <img src="https://api.iconify.design/teenyicons:markdown-outline.svg?color=%2300bfff" alt="logo"
-          width='100' /></a>
-    </p>
-    <p align="center">
-      A script converts markdown to html
-    </p>
-    <p align="center">
-      <a href="https://www.npmjs.com/package/convert-markdown-to-html" target="_blank" rel="noopener noreferrer"><img
-          src="https://badge.fury.io/js/csvs-parsers.svg" alt="NPM Version" /></a>
-      <a href="https://www.npmjs.com/package/convert-markdown-to-html" target="_blank" rel="noopener noreferrer"><img
-          src="https://img.shields.io/npm/dt/csvs-parsers.svg?logo=npm" alt="NPM Downloads" /></a>
-      <a href="https://bundlephobia.com/result?p=convert-markdown-to-html" target="_blank"
-        rel="noopener noreferrer"><img src="https://img.shields.io/bundlephobia/minzip/convert-markdown-to-html"
-          alt="Minizip" /></a>
-      <a href="https://github.com/hunghg255/convert-markdown-to-html/graphs/contributors" target="_blank"
-        rel="noopener noreferrer"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg"
-          alt="Contributors" /></a>
-      <a href="https://github.com/hunghg255/convert-markdown-to-html/blob/main/LICENSE" target="_blank"
-        rel="noopener noreferrer"><img src="https://badgen.net/github/license/hunghg255/convert-markdown-to-html"
-          alt="License" /></a>
-    </p>
-    <h2 id="features"><a class="anchor" href="#features">#</a>Features</h2>
-    <ul>
-      <li>Suport Syntax Highlighting</li>
-      <li>Suport Emoji</li>
-      <li>Suport Table of Contents</li>
-      <li>Suport Mermaid</li>
-      <li>Suport Katex</li>
-      <li>Suport Twoslash</li>
-    </ul>
-    <h2 id="demo"><a class="anchor" href="#demo">#</a>Demo</h2>
-    <p><a href="https://hunghg255.github.io/convert-markdown-to-html" target="_blank" rel="noopener">Demo</a></p>
-    <h2 id="api"><a class="anchor" href="#api">#</a>API</h2>
+<a href="https://www.npmjs.com/package/convert-markdown-to-html" target="_blank" rel="noopener noreferrer">
+<img src="https://api.iconify.design/teenyicons:markdown-outline.svg?color=%2300bfff" alt="logo" width='100'/></a>
+</p>
+<p align="center">
+  A script converts markdown to html
+</p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/convert-markdown-to-html" target="_blank" rel="noopener noreferrer"><img src="https://badge.fury.io/js/csvs-parsers.svg" alt="NPM Version" /></a>
+  <a href="https://www.npmjs.com/package/convert-markdown-to-html" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/npm/dt/csvs-parsers.svg?logo=npm" alt="NPM Downloads" /></a>
+  <a href="https://bundlephobia.com/result?p=convert-markdown-to-html" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/bundlephobia/minzip/convert-markdown-to-html" alt="Minizip" /></a>
+  <a href="https://github.com/hunghg255/convert-markdown-to-html/graphs/contributors" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg" alt="Contributors" /></a>
+  <a href="https://github.com/hunghg255/convert-markdown-to-html/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/hunghg255/convert-markdown-to-html" alt="License" /></a>
+</p>
+<h2 id="features"><a class="anchor" href="#features">#</a>Features</h2>
+<ul>
+<li>Support Syntax Highlighting</li>
+<li>Support Github Alert</li>
+<li>Support Emoji</li>
+<li>Support Table of Contents</li>
+<li>Support Mermaid</li>
+<li>Support Katex</li>
+<li>Support Twoslash</li>
+</ul>
+<h2 id="demo"><a class="anchor" href="#demo">#</a>Demo</h2>
+<p><a href="https://hunghg255.github.io/convert-markdown-to-html" target="_blank" rel="noopener">Demo</a></p>
+<h2 id="api"><a class="anchor" href="#api">#</a>API</h2>
 
-    <div class="code-blocks markdown-it-code-copy  ">
+<div class="code-blocks markdown-it-code-copy  code-blocks-group md ">
+  
 
-
-      <div class="code-blocks-pre">
-        <pre class="shiki shiki-themes vitesse-dark vitesse-dark"
-          style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-"><span class="line"><span>--i: input file</span></span>
-<span class="line"><span>--o: output file</span></span>
-<span class="line"><span>--t: title</span></span>
-<span class="line"><span>--g: github link</span></span>
-<span class="line"><span></span></span></code></pre>
-
-        <span class="code-blocks-lang"></span>
-        <button class="btn-copy">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-            <path fill="#555555"
-              d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <h2 id="cli"><a class="anchor" href="#cli">#</a>CLI</h2>
-    <ul>
-      <li>Option 1</li>
-    </ul>
-
-    <div class="code-blocks markdown-it-code-copy  code-blocks-group bash ">
-
-
-      <div class="code-blocks-pre">
-        <pre class="shiki shiki-themes vitesse-dark vitesse-dark"
-          style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665">npx</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> convert-markdown-to-html@latest --i README.md --o docs/index.html --t </span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Convert Markdown to HTML</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#C99076;--shiki-dark:#C99076"> --g</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> "</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">https://github.com/hunghg255/convert-markdown-to-html</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span></span>
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-md"><span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">--i: input file</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">--o: output file</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">--t: title</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">--g: github link</span></span>
 <span class="line"></span></code></pre>
 
-        <span class="code-blocks-lang">bash</span>
-        <button class="btn-copy">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-            <path fill="#555555"
-              d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <ul>
-      <li>Option 2</li>
-    </ul>
+    <span class="code-blocks-lang">md</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+<h2 id="cli"><a class="anchor" href="#cli">#</a>CLI</h2>
+<ul>
+<li>Option 1</li>
+</ul>
 
-    <div class="code-blocks markdown-it-code-copy  code-blocks-group bash ">
+<div class="code-blocks markdown-it-code-copy  code-blocks-group bash ">
+  
 
-
-      <div class="code-blocks-pre">
-        <pre class="shiki shiki-themes vitesse-dark vitesse-dark"
-          style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665">npm</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> i convert-markdown-to-html@latest --save-dev</span></span>
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665">npx</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> convert-markdown-to-html@latest --i README.md --o docs/index.html --t </span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Convert Markdown to HTML</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#C99076;--shiki-dark:#C99076"> --g</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> "</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">https://github.com/hunghg255/convert-markdown-to-html</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span></span>
 <span class="line"></span></code></pre>
 
-        <span class="code-blocks-lang">bash</span>
-        <button class="btn-copy">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-            <path fill="#555555"
-              d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <ul>
-      <li>Config (file package.json)</li>
-    </ul>
+    <span class="code-blocks-lang">bash</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+<ul>
+<li>Option 2</li>
+</ul>
 
-    <div class="code-blocks markdown-it-code-copy  code-blocks-group json ">
+<div class="code-blocks markdown-it-code-copy  code-blocks-group bash ">
+  
 
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665">npm</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> i convert-markdown-to-html@latest --save-dev</span></span>
+<span class="line"></span></code></pre>
 
-      <div class="code-blocks-pre">
-        <pre class="shiki shiki-themes vitesse-dark vitesse-dark"
-          style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-json"><span class="line"><span style="color:#666666;--shiki-dark:#666666">{</span></span>
+    <span class="code-blocks-lang">bash</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+<ul>
+<li>Config (file package.json)</li>
+</ul>
+
+<div class="code-blocks markdown-it-code-copy  code-blocks-group json ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-json"><span class="line"><span style="color:#666666;--shiki-dark:#666666">{</span></span>
 <span class="line"><span style="color:#FDAEB7;--shiki-dark:#FDAEB7;font-style:italic;--shiki-dark-font-style:italic">  ...</span></span>
 <span class="line"><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">  "</span><span style="color:#B8A965;--shiki-dark:#B8A965">scripts</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#666666;--shiki-dark:#666666">:</span><span style="color:#666666;--shiki-dark:#666666"> {</span></span>
 <span class="line"><span style="color:#FDAEB7;--shiki-dark:#FDAEB7;font-style:italic;--shiki-dark-font-style:italic">    ...</span></span>
@@ -905,23 +876,19 @@ hyphens: none; */
 <span class="line"><span style="color:#666666;--shiki-dark:#666666">}</span></span>
 <span class="line"></span></code></pre>
 
-        <span class="code-blocks-lang">json</span>
-        <button class="btn-copy">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-            <path fill="#555555"
-              d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <h2 id="install"><a class="anchor" href="#install">#</a>Install</h2>
+    <span class="code-blocks-lang">json</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+<h2 id="install"><a class="anchor" href="#install">#</a>Install</h2>
 
-    <div class="code-blocks markdown-it-code-copy  code-blocks-group ts ">
+<div class="code-blocks markdown-it-code-copy  code-blocks-group ts ">
+  
 
-
-      <div class="code-blocks-pre">
-        <pre class="shiki shiki-themes vitesse-dark vitesse-dark"
-          style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-ts"><span class="line"><span style="color:#4D9375;--shiki-dark:#4D9375">import</span><span style="color:#666666;--shiki-dark:#666666"> {</span><span style="color:#BD976A;--shiki-dark:#BD976A"> markdownToDocs</span><span style="color:#666666;--shiki-dark:#666666"> }</span><span style="color:#4D9375;--shiki-dark:#4D9375"> from</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">convert-markdown-to-html</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-ts"><span class="line"><span style="color:#4D9375;--shiki-dark:#4D9375">import</span><span style="color:#666666;--shiki-dark:#666666"> {</span><span style="color:#BD976A;--shiki-dark:#BD976A"> markdownToDocs</span><span style="color:#666666;--shiki-dark:#666666"> }</span><span style="color:#4D9375;--shiki-dark:#4D9375"> from</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">convert-markdown-to-html</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">declare const </span><span style="color:#80A665;--shiki-dark:#80A665">markdownToDocs</span><span style="color:#666666;--shiki-dark:#666666">: (</span></span>
 <span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">  markdown</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">string</span><span style="color:#666666;--shiki-dark:#666666">,</span></span>
@@ -934,142 +901,487 @@ hyphens: none; */
 <span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">const </span><span style="color:#BD976A;--shiki-dark:#BD976A">html</span><span style="color:#666666;--shiki-dark:#666666"> =</span><span style="color:#80A665;--shiki-dark:#80A665"> markdownToDocs</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#BD976A;--shiki-dark:#BD976A">markdownContent</span><span style="color:#666666;--shiki-dark:#666666">,</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Hello World</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">,</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">https://github.com</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">,</span><span style="color:#4D9375;--shiki-dark:#4D9375"> false</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
 <span class="line"></span></code></pre>
 
-        <span class="code-blocks-lang">ts</span>
-        <button class="btn-copy">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-            <path fill="#555555"
-              d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <h3 id="about"><a class="anchor" href="#about">#</a>About</h3>
-    <p><a href="https://www.buymeacoffee.com/hunghg255" target="_blank"><img
-          src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41"
-          width="174"></a></p>
-    <p>Gia Hung – <a href="https://hung.thedev.id" target="_blank" rel="noopener">hung.hg</a></p>
+    <span class="code-blocks-lang">ts</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+<h2 id="demo"><a class="anchor" href="#demo">#</a>Demo</h2>
+<p><a href="https://github.com/hunghg255/convert-markdown-to-html/blob/main/docs/content.md" target="_blank" rel="noopener">Code Markdown</a></p>
+<ul>
+<li>Code Highlight</li>
+</ul>
+
+<div class="code-blocks markdown-it-code-copy  code-blocks-group js ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark has-diff has-highlighted" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-js"><span class="line diff add"><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line diff remove"><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line highlighted"><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line highlighted error"><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line highlighted warning"><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">js</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="code-blocks markdown-it-code-copy  code-blocks-group js ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark has-focused" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-js"><span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line focused"><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">js</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+<ul>
+<li>Code Group</li>
+</ul>
+<p>
+<div class="markdown-code-group">
+        <div class="markdown-group-tab">
+          <div class="markdown-group-tab-item active" data-code-group="npm"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256"><path fill="#C12127" d="M0 256V0h256v256z"></path><path fill="#FFF" d="M48 48h160v160h-32V80h-48v128H48z"></path></svg>
+            <span>npm</span>
+            </div><div class="markdown-group-tab-item" data-code-group="yarn"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 128 128"><g fill="#2c8ebb"><path d="M99.24 80.71C94.9 80.76 91.1 83 87.89 85c-6 3.71-9 3.47-9 3.47l-.1-.17c-.41-.67 1.92-6.68-.69-13.84c-2.82-7.83-7.3-9.72-6.94-10.32c1.53-2.59 5.36-6.7 6.89-14.36c.91-4.64.67-12.28-1.39-16.28c-.38-.74-3.78 1.24-3.78 1.24s-3.18-7.09-4.07-7.66c-2.87-1.84-6 7.61-6 7.61a14 14 0 0 0-11.71 4.5a9.64 9.64 0 0 1-3.85 2.27c-.41.14-.91.12-2.15 3.47c-1.9 5.07 3.24 10.81 3.24 10.81s-6.13 4.33-8.4 9.72a24.78 24.78 0 0 0-1.75 11.68s-4.36 3.78-4.64 7.68a12.87 12.87 0 0 0 1.77 7.83a1.94 1.94 0 0 0 2.63.91s-2.9 3.38-.19 4.81c2.47 1.29 6.63 2 8.83-.19c1.6-1.6 1.92-5.17 2.51-6.63c.14-.34.62.57 1.08 1a10 10 0 0 0 1.36 1s-3.9 1.68-2.3 5.51c.53 1.27 2.42 2.08 5.51 2.06c1.15 0 13.76-.72 17.12-1.53a4.33 4.33 0 0 0 2.61-1.46a63 63 0 0 0 15.49-7c4.74-3.09 6.68-3.93 10.51-4.84c3.16-.75 2.95-5.65-1.24-5.58z"></path><path d="M64 2a62 62 0 1 0 62 62A62 62 0 0 0 64 2zm37.3 87.83c-3.35.81-4.91 1.44-9.41 4.36a67 67 0 0 1-15.56 7.18a8.71 8.71 0 0 1-3.64 1.77c-3.81.93-16.88 1.63-17.91 1.63h-.24c-4 0-6.27-1.24-7.49-2.54c-3.4 1.7-7.8 1-11-.69a5.55 5.55 0 0 1-3-3.9a6 6 0 0 1 0-2.06a6.66 6.66 0 0 1-.79-1A16.38 16.38 0 0 1 30 84.52c.29-3.73 2.87-7.06 4.55-8.83A28.56 28.56 0 0 1 36.61 64a26.82 26.82 0 0 1 6.82-9c-1.65-2.78-3.33-7.06-1.7-11.42c1.17-3.11 2.13-4.84 4.24-5.58a6.84 6.84 0 0 0 2.51-1.34A17.65 17.65 0 0 1 60.34 31c.19-.48.41-1 .65-1.46c1.6-3.4 3.3-5.31 5.29-6a4.88 4.88 0 0 1 4.4.5c.65.43 1.48 1 3.9 6a4.69 4.69 0 0 1 2.85-.1a3.81 3.81 0 0 1 2.39 1.94c2.47 4.74 2.8 13.19 1.72 18.62a33.8 33.8 0 0 1-5.84 13.31a25.73 25.73 0 0 1 5.77 9.43a25.42 25.42 0 0 1 1.41 10.41A28.7 28.7 0 0 0 86 81.91c3.06-1.89 7.68-4.74 13.19-4.81a6.62 6.62 0 0 1 7 5.7a6.35 6.35 0 0 1-4.89 7.03z"></path></g></svg>
+            <span>yarn</span>
+            </div><div class="markdown-group-tab-item" data-code-group="pnpm"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 128 128"><path fill="#f8ab00" d="M0 .004V40h39.996V.004Zm43.996 0V40h40V.004Zm44.008 0V40H128V.004Zm0 43.996v39.996H128V44Z"></path><path fill="#4c4c4c" d="M43.996 44v39.996h40V44ZM0 87.996v40h39.996v-40Zm43.996 0v40h40v-40Zm44.008 0v40H128v-40Z"></path></svg>
+            <span>pnpm</span>
+            </div><div class="markdown-group-tab-item" data-code-group="bun"><svg id="Bun" width="1.2em" height="1.2em" viewBox="0 0 80 70"><path id="Shadow" d="M71.09,20.74c-.16-.17-.33-.34-.5-.5s-.33-.34-.5-.5-.33-.34-.5-.5-.33-.34-.5-.5-.33-.34-.5-.5-.33-.34-.5-.5-.33-.34-.5-.5A26.46,26.46,0,0,1,75.5,35.7c0,16.57-16.82,30.05-37.5,30.05-11.58,0-21.94-4.23-28.83-10.86l.5.5.5.5.5.5.5.5.5.5.5.5.5.5C19.55,65.3,30.14,69.75,42,69.75c20.68,0,37.5-13.48,37.5-30C79.5,32.69,76.46,26,71.09,20.74Z"></path><g id="Body"><path id="Background" d="M73,35.7c0,15.21-15.67,27.54-35,27.54S3,50.91,3,35.7C3,26.27,9,17.94,18.22,13S33.18,3,38,3s8.94,4.13,19.78,10C67,17.94,73,26.27,73,35.7Z" style="fill: rgb(251, 240, 223);"></path><path id="Bottom_Shadow" data-name="Bottom Shadow" d="M73,35.7a21.67,21.67,0,0,0-.8-5.78c-2.73,33.3-43.35,34.9-59.32,24.94A40,40,0,0,0,38,63.24C57.3,63.24,73,50.89,73,35.7Z" style="fill: rgb(246, 222, 206);"></path><path id="Light_Shine" data-name="Light Shine" d="M24.53,11.17C29,8.49,34.94,3.46,40.78,3.45A9.29,9.29,0,0,0,38,3c-2.42,0-5,1.25-8.25,3.13-1.13.66-2.3,1.39-3.54,2.15-2.33,1.44-5,3.07-8,4.7C8.69,18.13,3,26.62,3,35.7c0,.4,0,.8,0,1.19C9.06,15.48,20.07,13.85,24.53,11.17Z" style="fill: rgb(255, 254, 252);"></path><path id="Top" d="M35.12,5.53A16.41,16.41,0,0,1,29.49,18c-.28.25-.06.73.3.59,3.37-1.31,7.92-5.23,6-13.14C35.71,5,35.12,5.12,35.12,5.53Zm2.27,0A16.24,16.24,0,0,1,39,19c-.12.35.31.65.55.36C41.74,16.56,43.65,11,37.93,5,37.64,4.74,37.19,5.14,37.39,5.49Zm2.76-.17A16.42,16.42,0,0,1,47,17.12a.33.33,0,0,0,.65.11c.92-3.49.4-9.44-7.17-12.53C40.08,4.54,39.82,5.08,40.15,5.32ZM21.69,15.76a16.94,16.94,0,0,0,10.47-9c.18-.36.75-.22.66.18-1.73,8-7.52,9.67-11.12,9.45C21.32,16.4,21.33,15.87,21.69,15.76Z" style="fill: rgb(204, 190, 167); fill-rule: evenodd;"></path><path id="Outline" d="M38,65.75C17.32,65.75.5,52.27.5,35.7c0-10,6.18-19.33,16.53-24.92,3-1.6,5.57-3.21,7.86-4.62,1.26-.78,2.45-1.51,3.6-2.19C32,1.89,35,.5,38,.5s5.62,1.2,8.9,3.14c1,.57,2,1.19,3.07,1.87,2.49,1.54,5.3,3.28,9,5.27C69.32,16.37,75.5,25.69,75.5,35.7,75.5,52.27,58.68,65.75,38,65.75ZM38,3c-2.42,0-5,1.25-8.25,3.13-1.13.66-2.3,1.39-3.54,2.15-2.33,1.44-5,3.07-8,4.7C8.69,18.13,3,26.62,3,35.7,3,50.89,18.7,63.25,38,63.25S73,50.89,73,35.7C73,26.62,67.31,18.13,57.78,13,54,11,51.05,9.12,48.66,7.64c-1.09-.67-2.09-1.29-3-1.84C42.63,4,40.42,3,38,3Z"></path></g><g id="Mouth"><g id="Background-2" data-name="Background"><path d="M45.05,43a8.93,8.93,0,0,1-2.92,4.71,6.81,6.81,0,0,1-4,1.88A6.84,6.84,0,0,1,34,47.71,8.93,8.93,0,0,1,31.12,43a.72.72,0,0,1,.8-.81H44.26A.72.72,0,0,1,45.05,43Z" style="fill: rgb(183, 20, 34);"></path></g><g id="Tongue"><path id="Background-3" data-name="Background" d="M34,47.79a6.91,6.91,0,0,0,4.12,1.9,6.91,6.91,0,0,0,4.11-1.9,10.63,10.63,0,0,0,1-1.07,6.83,6.83,0,0,0-4.9-2.31,6.15,6.15,0,0,0-5,2.78C33.56,47.4,33.76,47.6,34,47.79Z" style="fill: rgb(255, 97, 100);"></path><path id="Outline-2" data-name="Outline" d="M34.16,47a5.36,5.36,0,0,1,4.19-2.08,6,6,0,0,1,4,1.69c.23-.25.45-.51.66-.77a7,7,0,0,0-4.71-1.93,6.36,6.36,0,0,0-4.89,2.36A9.53,9.53,0,0,0,34.16,47Z"></path></g><path id="Outline-3" data-name="Outline" d="M38.09,50.19a7.42,7.42,0,0,1-4.45-2,9.52,9.52,0,0,1-3.11-5.05,1.2,1.2,0,0,1,.26-1,1.41,1.41,0,0,1,1.13-.51H44.26a1.44,1.44,0,0,1,1.13.51,1.19,1.19,0,0,1,.25,1h0a9.52,9.52,0,0,1-3.11,5.05A7.42,7.42,0,0,1,38.09,50.19Zm-6.17-7.4c-.16,0-.2.07-.21.09a8.29,8.29,0,0,0,2.73,4.37A6.23,6.23,0,0,0,38.09,49a6.28,6.28,0,0,0,3.65-1.73,8.3,8.3,0,0,0,2.72-4.37.21.21,0,0,0-.2-.09Z"></path></g><g id="Face"><ellipse id="Right_Blush" data-name="Right Blush" cx="53.22" cy="40.18" rx="5.85" ry="3.44" style="fill: rgb(254, 187, 208);"></ellipse><ellipse id="Left_Bluch" data-name="Left Bluch" cx="22.95" cy="40.18" rx="5.85" ry="3.44" style="fill: rgb(254, 187, 208);"></ellipse><path id="Eyes" d="M25.7,38.8a5.51,5.51,0,1,0-5.5-5.51A5.51,5.51,0,0,0,25.7,38.8Zm24.77,0A5.51,5.51,0,1,0,45,33.29,5.5,5.5,0,0,0,50.47,38.8Z" style="fill-rule: evenodd;"></path><path id="Iris" d="M24,33.64a2.07,2.07,0,1,0-2.06-2.07A2.07,2.07,0,0,0,24,33.64Zm24.77,0a2.07,2.07,0,1,0-2.06-2.07A2.07,2.07,0,0,0,48.75,33.64Z" style="fill: rgb(255, 255, 255); fill-rule: evenodd;"></path></g></svg>
+            <span>bun</span>
+            </div>
+        </div>
+        
+<div class="code-blocks markdown-it-code-copy  code-blocks-group npm active">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665"> npm</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> install @nuxtjs/html-validator --save-dev</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">bash</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="code-blocks markdown-it-code-copy  code-blocks-group yarn ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665"> yarn</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> add @nuxtjs/html-validator --dev</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">bash</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="code-blocks markdown-it-code-copy  code-blocks-group pnpm ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665"> pnpm</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> i -D @nuxtjs/html-validator</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">bash</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="code-blocks markdown-it-code-copy  code-blocks-group bun ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665"> bun</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> install @nuxtjs/html-validator --save-dev</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">bash</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+</div></p>
+<p>
+<div class="markdown-code-group">
+        <div class="markdown-group-tab">
+          <div class="markdown-group-tab-item active" data-code-group="js"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><g fill="none"><rect width="256" height="256" fill="#F0DB4F" rx="60"/><path fill="#323330" d="m67.312 213.932l19.59-11.856c3.78 6.701 7.218 12.371 15.465 12.371c7.905 0 12.889-3.092 12.889-15.12v-81.798h24.058v82.138c0 24.917-14.606 36.259-35.916 36.259c-19.245 0-30.416-9.967-36.087-21.996m85.07-2.576l19.588-11.341c5.157 8.421 11.859 14.607 23.715 14.607c9.969 0 16.325-4.984 16.325-11.858c0-8.248-6.53-11.17-17.528-15.98l-6.013-2.579c-17.357-7.388-28.871-16.668-28.871-36.258c0-18.044 13.748-31.792 35.229-31.792c15.294 0 26.292 5.328 34.196 19.247l-18.731 12.029c-4.125-7.389-8.591-10.31-15.465-10.31c-7.046 0-11.514 4.468-11.514 10.31c0 7.217 4.468 10.139 14.778 14.608l6.014 2.577c20.449 8.765 31.963 17.699 31.963 37.804c0 21.654-17.012 33.51-39.867 33.51c-22.339 0-36.774-10.654-43.819-24.574"/></g></svg>
+            <span>js</span>
+            </div><div class="markdown-group-tab-item" data-code-group="ts"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><path fill="#3178C6" d="M20 0h216c11.046 0 20 8.954 20 20v216c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20V20C0 8.954 8.954 0 20 0"/><path fill="#FFF" d="M150.518 200.475v27.62c4.492 2.302 9.805 4.028 15.938 5.179c6.133 1.151 12.597 1.726 19.393 1.726c6.622 0 12.914-.633 18.874-1.899c5.96-1.266 11.187-3.352 15.678-6.257c4.492-2.906 8.048-6.704 10.669-11.394c2.62-4.689 3.93-10.486 3.93-17.391c0-5.006-.749-9.394-2.246-13.163a30.748 30.748 0 0 0-6.479-10.055c-2.821-2.935-6.205-5.567-10.149-7.898c-3.945-2.33-8.394-4.531-13.347-6.602c-3.628-1.497-6.881-2.949-9.761-4.359c-2.879-1.41-5.327-2.848-7.342-4.316c-2.016-1.467-3.571-3.021-4.665-4.661c-1.094-1.64-1.641-3.495-1.641-5.567c0-1.899.489-3.61 1.468-5.135s2.362-2.834 4.147-3.927c1.785-1.094 3.973-1.942 6.565-2.547c2.591-.604 5.471-.906 8.638-.906c2.304 0 4.737.173 7.299.518c2.563.345 5.14.877 7.732 1.597a53.669 53.669 0 0 1 7.558 2.719a41.7 41.7 0 0 1 6.781 3.797v-25.807c-4.204-1.611-8.797-2.805-13.778-3.582c-4.981-.777-10.697-1.165-17.147-1.165c-6.565 0-12.784.705-18.658 2.115c-5.874 1.409-11.043 3.61-15.506 6.602c-4.463 2.993-7.99 6.805-10.582 11.437c-2.591 4.632-3.887 10.17-3.887 16.615c0 8.228 2.375 15.248 7.127 21.06c4.751 5.811 11.963 10.731 21.638 14.759a291.458 291.458 0 0 1 10.625 4.575c3.283 1.496 6.119 3.049 8.509 4.66c2.39 1.611 4.276 3.366 5.658 5.265c1.382 1.899 2.073 4.057 2.073 6.474a9.901 9.901 0 0 1-1.296 4.963c-.863 1.524-2.174 2.848-3.93 3.97c-1.756 1.122-3.945 1.999-6.565 2.632c-2.62.633-5.687.95-9.2.95c-5.989 0-11.92-1.05-17.794-3.151c-5.875-2.1-11.317-5.25-16.327-9.451m-46.036-68.733H140V109H41v22.742h35.345V233h28.137z"/></svg>
+            <span>ts</span>
+            </div>
+        </div>
+        
+<div class="code-blocks markdown-it-code-copy  code-blocks-group js ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-js"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">const</span><span style="color:#BD976A;--shiki-dark:#BD976A"> a</span><span style="color:#666666;--shiki-dark:#666666"> =</span><span style="color:#4C9A91;--shiki-dark:#4C9A91"> 2</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">js</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="code-blocks markdown-it-code-copy  code-blocks-group ts ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-ts"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">const </span><span style="color:#BD976A;--shiki-dark:#BD976A">a</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">number</span><span style="color:#666666;--shiki-dark:#666666"> =</span><span style="color:#4C9A91;--shiki-dark:#4C9A91"> 2</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">ts</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+</div></p>
+<ul>
+<li>Github Alert</li>
+</ul>
+<div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p><p>Highlights information that users should take into account, even when skimming.</p>
+</div>
+<div class="markdown-alert markdown-alert-tip"><p class="markdown-alert-title"><svg class="octicon octicon-light-bulb mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p><p>Optional information to help a user be more successful.</p>
+</div>
+<div class="markdown-alert markdown-alert-important"><p class="markdown-alert-title"><svg class="octicon octicon-report mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p><p>Crucial information necessary for users to succeed.</p>
+</div>
+<div class="markdown-alert markdown-alert-warning"><p class="markdown-alert-title"><svg class="octicon octicon-alert mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p><p>Critical content demanding immediate user attention due to potential risks.</p>
+</div>
+<div class="markdown-alert markdown-alert-caution"><p class="markdown-alert-title"><svg class="octicon octicon-stop mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Caution</p><p>Negative potential consequences of an action.</p>
+</div>
+<ul>
+<li>Katex</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>equation</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∇</mi><mo>⋅</mo><mover accent="true"><mi mathvariant="bold">B</mi><mo>⃗</mo></mover><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\nabla \cdot \vec{\mathbf{B}}  = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">∇</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9691em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">B</span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></td>
+<td>divergence of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi mathvariant="bold">B</mi><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{\mathbf{B}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9691em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">B</span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span></span></span></span> is zero</td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∇</mi><mo>×</mo><mover accent="true"><mi mathvariant="bold">E</mi><mo>⃗</mo></mover><mtext> </mtext><mo>+</mo><mtext> </mtext><mfrac><mn>1</mn><mi>c</mi></mfrac><mtext> </mtext><mfrac><mrow><mi mathvariant="normal">∂</mi><mover accent="true"><mi mathvariant="bold">B</mi><mo>⃗</mo></mover></mrow><mrow><mi mathvariant="normal">∂</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mover accent="true"><mn mathvariant="bold">0</mn><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t}  = \vec{\mathbf{0}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">∇</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0524em;vertical-align:-0.0833em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">E</span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.4174em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0724em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord accent mtight"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-2.714em;"><span class="pstrut" style="height:2.714em;"></span><span class="mord mathbf mtight">B</span></span><span style="top:-2.9691em;"><span class="pstrut" style="height:2.714em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay mtight" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9274em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9274em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">0</span></span><span style="top:-3.2134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span></span></span></span></td>
+<td>curl of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi mathvariant="bold">E</mi><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{\mathbf{E}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9691em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">E</span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span></span></span></span> is proportional to the rate of change of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi mathvariant="bold">B</mi><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{\mathbf{B}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9691em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">B</span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span></span></span></span></td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∇</mi><mo>×</mo><mover accent="true"><mi mathvariant="bold">B</mi><mo>⃗</mo></mover><mo>−</mo><mtext> </mtext><mfrac><mn>1</mn><mi>c</mi></mfrac><mtext> </mtext><mfrac><mrow><mi mathvariant="normal">∂</mi><mover accent="true"><mi mathvariant="bold">E</mi><mo>⃗</mo></mover></mrow><mrow><mi mathvariant="normal">∂</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mn>4</mn><mi>π</mi></mrow><mi>c</mi></mfrac><mover accent="true"><mi mathvariant="bold">j</mi><mo>⃗</mo></mover><mi mathvariant="normal">∇</mi><mo>⋅</mo><mover accent="true"><mi mathvariant="bold">E</mi><mo>⃗</mo></mover><mo>=</mo><mn>4</mn><mi>π</mi><mi>ρ</mi></mrow><annotation encoding="application/x-tex">\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} = \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} = 4 \pi \rho</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">∇</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0524em;vertical-align:-0.0833em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">B</span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.4174em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0724em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord accent mtight"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-2.714em;"><span class="pstrut" style="height:2.714em;"></span><span class="mord mathbf mtight">E</span></span><span style="top:-2.9691em;"><span class="pstrut" style="height:2.714em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay mtight" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.3224em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">π</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9774em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">j</span></span><span style="top:-3.2634em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mord">∇</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9691em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9691em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathbf">E</span></span><span style="top:-3.2551em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1522em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">4</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mord mathnormal">ρ</span></span></span></span></td>
+<td><em>wha?</em></td>
+</tr>
+</tbody>
+</table>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>x</mi><mn>3</mn></msup><mo>+</mo><msup><mi>y</mi><mn>3</mn></msup><mo>=</mo><msup><mi>z</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">x^3 + y^3 = z^3
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9474em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0585em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8641em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><menclose notation="downdiagonalstrike"><mfrac><mn>1</mn><mn>3</mn></mfrac></menclose><menclose notation="downdiagonalstrike"><mfrac><mn>1</mn><mn>3</mn></mfrac></menclose></mfrac><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\frac{\bcancel{\frac13}}{\bcancel{\frac13}} = 1
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.6602em;vertical-align:-1.0801em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.5801em;"><span style="top:-2.2649em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord cancel-lap"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-3.1901em;"><span class="pstrut" style="height:3.1901em;"></span><span class="mord cancel-pad"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span class="svg-align" style="top:-2.8451em;"><span class="pstrut" style="height:3.1901em;"></span><span style="height:1.1901em;"><svg xmlns="http://www.w3.org/2000/svg" width='100%' height='1.1901em'><line x1='0' y1='0' x2='100%' y2='100%' stroke-width='0.046em'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.735em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord cancel-lap"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-3.1901em;"><span class="pstrut" style="height:3.1901em;"></span><span class="mord cancel-pad"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span class="svg-align" style="top:-2.8451em;"><span class="pstrut" style="height:3.1901em;"></span><span style="height:1.1901em;"><svg xmlns="http://www.w3.org/2000/svg" width='100%' height='1.1901em'><line x1='0' y1='0' x2='100%' y2='100%' stroke-width='0.046em'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0801em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mo stretchy="false">(</mo><mi>a</mi><mo>+</mo><mi>b</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mo stretchy="false">(</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><mi>a</mi><mi>b</mi><mo>+</mo><mi>b</mi><mi>a</mi><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><mn>2</mn><mi>a</mi><mi>b</mi><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+
+(a+b)^2 &amp;= (a+b)(a+b)           \\
+        &amp;= a^2 + ab + ba + b^2  \\
+        &amp;= a^2 + 2ab + b^2
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:4.5723em;vertical-align:-2.0362em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.5362em;"><span style="top:-4.6721em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">b</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.1479em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-1.6238em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.0362em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.5362em;"><span style="top:-4.6721em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">b</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">b</span><span class="mclose">)</span></span></span><span style="top:-3.1479em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">ab</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">ba</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-1.6238em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">2</span><span class="mord mathnormal">ab</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.0362em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mn>2</mn><mrow><mn>1</mn><mo>+</mo><mfrac><mn>2</mn><mrow><mn>1</mn><mo>+</mo><mfrac><mn>2</mn><mn>1</mn></mfrac></mrow></mfrac></mrow></mfrac></mrow><annotation encoding="application/x-tex">\cfrac{2}{1+\cfrac{2}{1+\cfrac{2}{1}}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:5.236em;vertical-align:-3.646em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.59em;"><span style="top:-2.11em;"><span class="pstrut" style="height:3.59em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.59em;"><span style="top:-2.11em;"><span class="pstrut" style="height:3.59em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.59em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.74em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span></span></span></span></span><span style="top:-3.82em;"><span class="pstrut" style="height:3.59em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-4.33em;"><span class="pstrut" style="height:3.59em;"></span><span class="mord"><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.166em;"><span></span></span></span></span></span><span></span></span></span></span><span style="top:-3.82em;"><span class="pstrut" style="height:3.59em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-4.33em;"><span class="pstrut" style="height:3.59em;"></span><span class="mord"><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:3.646em;"><span></span></span></span></span></span><span></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mi>Q</mi></mrow><annotation encoding="application/x-tex">P\implies Q
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7073em;vertical-align:-0.024em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>a</mi><mo>+</mo><mo>&lt;</mo><mi>b</mi><mo>&gt;</mo><mo>+</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">a + \lt b\gt + c
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mord">+</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord">+</span><span class="mord mathnormal">c</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><msub><mi>a</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\sum\nolimits_{k=1}^n a_k
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.704em;vertical-align:-0.5997em;"></span><span class="mop"><span class="mop op-symbol large-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1043em;"><span style="top:-2.1003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.5029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mi>a</mi><mi>b</mi></mfrac><mo>+</mo><mstyle scriptlevel="2" displaystyle="false"><mfrac><mi>c</mi><mi>d</mi></mfrac><mo>+</mo><mfrac><mi>e</mi><mi>f</mi></mfrac></mstyle><mo>+</mo><mfrac><mi>g</mi><mi>h</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac ab + {\scriptscriptstyle \frac cd + \frac ef} + \frac gh
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.7936em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">b</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">a</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9466em;vertical-align:-0.3632em;"></span><span class="mord"><span class="mord mtight sizing reset-size6 size1"><span class="mopen nulldelimiter sizing reset-size1 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8176em;"><span style="top:-2.468em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight"><span class="mord mathnormal mtight">d</span></span></span><span style="top:-3.2255em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line mtight" style="border-bottom-width:0.049em;"></span></span><span style="top:-3.387em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.532em;"><span></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size1 size6"></span></span><span class="mbin mtight sizing reset-size6 size1">+</span><span class="mord mtight sizing reset-size6 size1"><span class="mopen nulldelimiter sizing reset-size1 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8176em;"><span style="top:-2.468em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span><span style="top:-3.2255em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line mtight" style="border-bottom-width:0.049em;"></span></span><span style="top:-3.387em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7264em;"><span></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size1 size6"></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.7936em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">h</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mo>∑</mo><mstyle scriptlevel="1"><mtable rowspacing="0.1em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="1" displaystyle="false"><mrow><mn>1</mn><mo>&lt;</mo><mi>i</mi><mo>&lt;</mo><mn>3</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="1" displaystyle="false"><mrow><mn>1</mn><mo>≤</mo><mi>j</mi><mo>&lt;</mo><mn>5</mn></mrow></mstyle></mtd></mtr></mtable></mstyle></munder><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\sum_{ \substack{ 1\lt i\lt 3 \\ 1\le j\lt 5 }} a_{ij}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0514em;vertical-align:-2.0014em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.5663em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0967em;"><span style="top:-3.1372em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight"><span class="mord mtight">1</span><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">i</span><span class="mrel mtight">&lt;</span><span class="mord mtight">3</span></span></span><span style="top:-2.2977em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight"><span class="mord mtight">1</span><span class="mrel mtight">≤</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">&lt;</span><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5967em;"><span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.0014em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">ij</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><munder><mrow><mi>x</mi><mo>+</mo><mo>⋯</mo><mo>+</mo><mi>x</mi></mrow><mo stretchy="true">⏟</mo></munder><mrow><mi>n</mi><mrow><mtext> </mtext><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi></mrow></mrow></munder></mrow><annotation encoding="application/x-tex">\underbrace{x + \cdots + x}_{n\rm\ times}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.9822em;vertical-align:-1.3988em;"></span><span class="mord munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5833em;"><span style="top:-1.6012em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mtight"><span class="mspace mtight"><span class="mtight"> </span></span><span class="mord mathrm mtight">times</span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5833em;"><span class="svg-align" style="top:-2.2687em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.548em;min-width:1.6em;"><span class="brace-left" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMinYMin slice'><path d='M0 6l6-6h17c12.688 0 19.313.3 20 1 4 4 7.313 8.3 10 13
+ 35.313 51.3 80.813 93.8 136.5 127.5 55.688 33.7 117.188 55.8 184.5 66.5.688
+ 0 2 .3 4 1 18.688 2.7 76 4.3 172 5h399450v120H429l-6-1c-124.688-8-235-61.7
+-331-161C60.687 138.7 32.312 99.3 7 54L0 41V6z'/></svg></span><span class="brace-center" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMidYMin slice'><path d='M199572 214
+c100.7 8.3 195.3 44 280 108 55.3 42 101.7 93 139 153l9 14c2.7-4 5.7-8.7 9-14
+ 53.3-86.7 123.7-153 211-199 66.7-36 137.3-56.3 212-62h199568v120H200432c-178.3
+ 11.7-311.7 78.3-403 201-6 8-9.7 12-11 12-.7.7-6.7 1-18 1s-17.3-.3-18-1c-1.3 0
+-5-4-11-12-44.7-59.3-101.3-106.3-170-141s-145.3-54.3-229-60H0V214z'/></svg></span><span class="brace-right" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMaxYMin slice'><path d='M399994 0l6 6v35l-6 11c-56 104-135.3 181.3-238 232-57.3
+ 28.7-117 45-179 50H-300V214h399897c43.3-7 81-15 113-26 100.7-33 179.7-91 237
+-174 2.7-5 6-9 10-13 .7-1 7.3-1 20-1h17z'/></svg></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7313em;"><span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.3988em;"><span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo fence="true">(</mo><mpadded class ="vcenter"><mfrac><mrow><mi>a</mi><mo>+</mo><mi>b</mi></mrow><mfrac><mi>c</mi><mi>d</mi></mfrac></mfrac></mpadded><mo fence="true">)</mo></mrow><annotation encoding="application/x-tex">\left(\vcenter{\frac{a+b}{\dfrac{c}{d}}}\right)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.055em;vertical-align:-1.2775em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">(</span></span><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.7775em;"><span style="top:-3.7775em;"><span class="pstrut" style="height:3.3714em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.11em;"><span class="pstrut" style="height:3.1076em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-3.3376em;"><span class="pstrut" style="height:3.1076em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.7846em;"><span class="pstrut" style="height:3.1076em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.6836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2775em;"><span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size4">)</span></span></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>x</mi><mo>+</mo><menclose notation="updiagonalstrike downdiagonalstrike"><mrow><mn>5</mn><mi>y</mi></mrow></menclose><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x+\xcancel{5y}=0
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord cancel-lap"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord cancel-pad"><span class="mord">5</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span class="svg-align" style="top:-2.8056em;"><span class="pstrut" style="height:3em;"></span><span style="height:0.8389em;"><svg xmlns="http://www.w3.org/2000/svg" width='100%' height='0.8389em'><line x1='0' y1='0' x2='100%' y2='100%' stroke-width='0.046em'/><line x1='0' y1='100%' x2='100%' y2='0' stroke-width='0.046em'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1944em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.66em" columnalign="center center center" columnlines="dashed dashed" columnspacing="1em" rowlines="solid dashed"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>a</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>b</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>c</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>d</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>e</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>f</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>g</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>h</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>i</mi></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\def\arraystretch{1.5}
+  \begin{array}{c:c:c}
+  a &amp; b &amp; c \\ \hline
+  d &amp; e &amp; f \\
+  \hdashline
+  g &amp; h &amp; i
+\end{array}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:5.4em;vertical-align:-2.45em;"></span><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.95em;"><span style="top:-4.95em;"><span class="pstrut" style="height:4.95em;"></span><span class="mtable"><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.95em;"><span style="top:-4.95em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal">a</span></span></span><span style="top:-3.15em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal">d</span></span></span><span style="top:-1.35em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.45em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="vertical-separator" style="height:5.4em;border-right-width:0.04em;border-right-style:dashed;margin:0 -0.02em;vertical-align:-2.45em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.95em;"><span style="top:-4.95em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal">b</span></span></span><span style="top:-3.15em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal">e</span></span></span><span style="top:-1.35em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.45em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="vertical-separator" style="height:5.4em;border-right-width:0.04em;border-right-style:dashed;margin:0 -0.02em;vertical-align:-2.45em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.95em;"><span style="top:-4.95em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal">c</span></span></span><span style="top:-3.15em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span><span style="top:-1.35em;"><span class="pstrut" style="height:3.26em;"></span><span class="mord"><span class="mord mathnormal">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.45em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span></span></span><span style="top:-4.3em;"><span class="pstrut" style="height:4.95em;"></span><span class="hdashline" style="border-bottom-width:0.04em;"></span></span><span style="top:-6.1em;"><span class="pstrut" style="height:4.95em;"></span><span class="hline" style="border-bottom-width:0.04em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.45em;"><span></span></span></span></span></span></span></span></span></span></p>
+<ul>
+<li>Mermaid</li>
+</ul>
+<div class="markdown-it-mermaid opacity-0"><pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-mermaid"><span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">sequenceDiagram</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    box Local</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    participant Working Directory</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    participant Staging Area</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    participant Local Repo</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    end</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    box Remote</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    participant Remote Repo</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    end</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    Working Directory->>Staging Area: git add</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    Staging Area->>Local Repo: git commit</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    Local Repo->>Remote Repo: git push</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    Remote Repo->>Local Repo: git fetch</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    Local Repo->>Working Directory: git merge</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    Remote Repo->>Working Directory: git pull</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    Remote Repo->>Local Repo: git clone</span></span>
+<span class="line"><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">    Local Repo->>Working Directory: git checkout</span></span>
+<span class="line"></span></code></pre>
+</div><ul>
+<li>Twoslash</li>
+</ul>
+
+<div class="code-blocks markdown-it-code-copy code-blocks-title code-blocks-group ts ">
+  <h5>blog.ts</h5>
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark twoslash lsp" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-ts"><span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">var </span><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">Console</span></span></code></span>console</span></span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">Console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(...</span><span style="color:#BD976A;--shiki-dark:#BD976A">data</span><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">: </span><span style="color:#BD976A;--shiki-dark:#BD976A">any</span><span style="color:#666666;--shiki-dark:#666666">[])</span><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">: </span><span style="color:#CB7676;--shiki-dark:#CB7676">void</span></span></code><div class="twoslash-popup-docs"><p><a href="https://developer.mozilla.org/docs/Web/API/console/log" target="_blank" rel="noopener">MDN Reference</a></p></div></span>log</span></span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A"><span class="twoslash-hover twoslash-query-presisted"><span class="twoslash-popup-container ingore-twoslash"><div class="twoslash-popup-arrow"></div><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">var </span><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">Console</span></span></code></span>console</span></span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">Console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(...</span><span style="color:#BD976A;--shiki-dark:#BD976A">data</span><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">: </span><span style="color:#BD976A;--shiki-dark:#BD976A">any</span><span style="color:#666666;--shiki-dark:#666666">[])</span><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">: </span><span style="color:#CB7676;--shiki-dark:#CB7676">void</span></span></code><div class="twoslash-popup-docs"><p><a href="https://developer.mozilla.org/docs/Web/API/console/log" target="_blank" rel="noopener">MDN Reference</a></p></div></span>log</span></span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">2</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#4D9375;--shiki-dark:#4D9375">import</span><span style="color:#666666;--shiki-dark:#666666"> {</span><span style="color:#BD976A;--shiki-dark:#BD976A"> </span><span style="color:#BD976A;--shiki-dark:#BD976A"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">function</span><span style="color:#80A665;--shiki-dark:#80A665"> rendererRich</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#BD976A;--shiki-dark:#BD976A">options</span><span style="color:#CB7676;--shiki-dark:#CB7676">?</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">RendererRichOptions</span><span style="color:#666666;--shiki-dark:#666666">):</span><span style="color:#5DA994;--shiki-dark:#5DA994"> TwoslashRenderer</span></span></code><div class="twoslash-popup-docs"><p>An alternative renderer that providers better prefixed class names,
+with syntax highlight for the info text.</p></div></span>rendererRich</span></span><span style="color:#666666;--shiki-dark:#666666">,</span><span style="color:#BD976A;--shiki-dark:#BD976A"> </span><span style="color:#BD976A;--shiki-dark:#BD976A"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">function</span><span style="color:#80A665;--shiki-dark:#80A665"> transformerTwoslash</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#BD976A;--shiki-dark:#BD976A">options</span><span style="color:#CB7676;--shiki-dark:#CB7676">?</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">TransformerTwoslashIndexOptions</span><span style="color:#666666;--shiki-dark:#666666">):</span><span style="color:#5DA994;--shiki-dark:#5DA994"> _shikijs_core_dist_chunk_tokens_mjs</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#5DA994;--shiki-dark:#5DA994">A</span></span></code><div class="twoslash-popup-docs"><p>Factory function to create a Shiki transformer for twoslash integrations.</p></div></span>transformerTwoslash</span></span><span style="color:#666666;--shiki-dark:#666666"> }</span><span style="color:#4D9375;--shiki-dark:#4D9375"> from</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">@shikijs/twoslash</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#80A665;--shiki-dark:#80A665"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">function</span><span style="color:#80A665;--shiki-dark:#80A665"> transformerTwoslash</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#BD976A;--shiki-dark:#BD976A">options</span><span style="color:#CB7676;--shiki-dark:#CB7676">?</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">TransformerTwoslashIndexOptions</span><span style="color:#666666;--shiki-dark:#666666"> | </span><span style="color:#CB7676;--shiki-dark:#CB7676">undefined</span><span style="color:#666666;--shiki-dark:#666666">):</span><span style="color:#5DA994;--shiki-dark:#5DA994"> ShikiTransformer</span></span></code><div class="twoslash-popup-docs"><p>Factory function to create a Shiki transformer for twoslash integrations.</p></div></span>transformerTwoslash</span></span><span style="color:#666666;--shiki-dark:#666666">({</span></span>
+<span class="line"><span style="color:#B8A965;--shiki-dark:#B8A965">  </span><span style="color:#B8A965;--shiki-dark:#B8A965"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">TransformerTwoslashOptions</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#BD976A;--shiki-dark:#BD976A">renderer</span><span style="color:#CB7676;--shiki-dark:#CB7676">?:</span><span style="color:#BD976A;--shiki-dark:#BD976A"> TwoslashRenderer</span><span style="color:#CB7676;--shiki-dark:#CB7676"> |</span><span style="color:#CB7676;--shiki-dark:#CB7676"> undefined</span></span></code><div class="twoslash-popup-docs"><p>Custom renderers to decide how each info should be rendered</p></div></span>renderer</span></span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#80A665;--shiki-dark:#80A665"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">function</span><span style="color:#80A665;--shiki-dark:#80A665"> rendererRich</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#BD976A;--shiki-dark:#BD976A">options</span><span style="color:#CB7676;--shiki-dark:#CB7676">?</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">RendererRichOptions</span><span style="color:#666666;--shiki-dark:#666666"> | </span><span style="color:#CB7676;--shiki-dark:#CB7676">undefined</span><span style="color:#666666;--shiki-dark:#666666">):</span><span style="color:#5DA994;--shiki-dark:#5DA994"> TwoslashRenderer</span></span></code><div class="twoslash-popup-docs"><p>An alternative renderer that providers better prefixed class names,
+with syntax highlight for the info text.</p></div></span>rendererRich</span></span><span style="color:#666666;--shiki-dark:#666666">(), </span><span style="color:#758575DD;--shiki-dark:#758575DD">// &#x3C;--</span></span>
+<span class="line"><span style="color:#666666;--shiki-dark:#666666">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#4D9375;--shiki-dark:#4D9375">import</span><span style="color:#666666;--shiki-dark:#666666"> {</span></span>
+<span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">  </span><span style="color:#BD976A;--shiki-dark:#BD976A"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">function</span><span style="color:#80A665;--shiki-dark:#80A665"> transformerNotationDiff</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#BD976A;--shiki-dark:#BD976A">options</span><span style="color:#CB7676;--shiki-dark:#CB7676">?</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">TransformerNotationDiffOptions</span><span style="color:#666666;--shiki-dark:#666666">):</span><span style="color:#5DA994;--shiki-dark:#5DA994"> ShikiTransformer</span></span></code><div class="twoslash-popup-docs"><p>Use <code>[!code ++]</code> and <code>[!code --]</code> to mark added and removed lines.</p></div></span>transformerNotationDiff</span></span><span style="color:#666666;--shiki-dark:#666666">,</span></span>
+<span class="line"><span style="color:#758575DD;--shiki-dark:#758575DD">  // ...</span></span>
+<span class="line"><span style="color:#666666;--shiki-dark:#666666">}</span><span style="color:#4D9375;--shiki-dark:#4D9375"> from</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">@shikijs/transformers</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">const </span><span style="color:#BD976A;--shiki-dark:#BD976A"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">const </span><span style="color:#BD976A;--shiki-dark:#BD976A">code</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">console.log('hello')</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span></span></code></span>code</span></span><span style="color:#666666;--shiki-dark:#666666"> =</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> `</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">console.log('hello')</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">`</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">ts</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
   </main>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      function getTextExcept(element, exclude) {
-        return worker(element);
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  function getTextExcept(element, exclude) {
+    return worker(element);
 
-        function worker(node, text = '') {
-          // @ts-ignore
-          if (node.nodeType === Node.TEXT_NODE) {
-            text += node.nodeValue;
-            // @ts-ignore
-          } else if (node.nodeType === Node.ELEMENT_NODE && exclude && !node.matches(exclude)) {
-            for (const child of node.childNodes) {
-              text = worker(child, text);
-            }
-          }
-          return text;
+    function worker(node, text = '') {
+      // @ts-ignore
+      if (node.nodeType === Node.TEXT_NODE) {
+        text += node.nodeValue;
+        // @ts-ignore
+      } else if (node.nodeType === Node.ELEMENT_NODE && exclude && !node.matches(exclude)) {
+        for (const child of node.childNodes) {
+          text = worker(child, text);
         }
       }
-
-      const copyContent = async (text) => {
-        try {
-          // @ts-ignore
-          await navigator.clipboard.writeText(text);
-        } catch (error) {
-          // @ts-ignore
-          console.error('Failed to copy:', error);
-        }
-      };
-
-      const eleCopy = document.querySelectorAll('.markdown-it-code-copy');
-
-      if (eleCopy?.length) {
-        eleCopy.forEach((el) => {
-          const btn = el.querySelector('.btn-copy');
-          btn.addEventListener('click', () => {
-            const content = getTextExcept(el.querySelector('pre'), '.ingore-twoslash');
-
-            copyContent(content);
-            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#6bbd71" d="M9 16.17L4.83 12l-1.42 1.41L9 19L21 7l-1.41-1.41z"/></svg>`;
-            const t = setTimeout(() => {
-              btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>`;
-              clearTimeout(t);
-            }, 1200);
-          });
-        });
-      }
-
-      const eleCodeGroups = document.querySelectorAll('.markdown-code-group');
-
-      const removeCodeBlockClass = (el) => {
-        const codeBlocks = el.querySelectorAll('.code-blocks-group');
-        codeBlocks.forEach((el) => {
-          el.classList.remove('active');
-        });
-      };
-
-      const removeTabClass = (el) => {
-        const codeBlocks = el.querySelectorAll('.markdown-group-tab-item');
-        codeBlocks.forEach((el) => {
-          el.classList.remove('active');
-        });
-      };
-
-      const initCodeGroupActive = (el) => {
-        const tabActive = el.querySelector('.markdown-group-tab-item.active');
-        const dataCodeGroupActive = tabActive?.dataset.codeGroup;
-
-        const codeActive = el.querySelector(`.code-blocks-group.${dataCodeGroupActive}`);
-
-        if (codeActive) {
-          codeActive.classList.add('active');
-        }
-      };
-
-      if (eleCodeGroups?.length) {
-        eleCodeGroups.forEach((el) => {
-          const btns = el.querySelectorAll('.markdown-group-tab-item');
-
-          initCodeGroupActive(el);
-
-          btns.forEach((btn) => {
-            btn.addEventListener('click', () => {
-              const dataCodeGroup = btn.dataset.codeGroup;
-
-              removeCodeBlockClass(el);
-              removeTabClass(el);
-
-              const code = el.querySelector(`.code-blocks-group.${dataCodeGroup}`);
-              code.classList.add('active');
-              btn.classList.add('active');
-            });
-          });
-        });
-      }
-
-
-
-    }, false);
-  </script>
-
-  <script type="module" defer>
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
-
-    const mermaidElement = document.querySelectorAll('.markdown-it-mermaid');
-
-    if (mermaidElement?.length) {
-      mermaidElement.forEach(async (el) => {
-        const content = el?.textContent;
-        if (content) {
-          console.log(content)
-          const type = mermaid.detectType(content);
-          console.log(type)
-          const { svg } = await mermaid.render(type, content);
-          el.innerHTML = svg;
-          el.classList.remove('opacity-0');
-        }
-      });
+      return text;
     }
-  </script>
-</body>
+  }
 
+  const copyContent = async (text) => {
+    try {
+      // @ts-ignore
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      // @ts-ignore
+      console.error('Failed to copy:', error);
+    }
+  };
+
+  const eleCopy = document.querySelectorAll('.markdown-it-code-copy');
+
+  if (eleCopy?.length) {
+    eleCopy.forEach((el) => {
+      const btn = el.querySelector('.btn-copy');
+      btn.addEventListener('click', () => {
+        const content = getTextExcept(el.querySelector('pre'), '.ingore-twoslash');
+
+        copyContent(content);
+        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#6bbd71" d="M9 16.17L4.83 12l-1.42 1.41L9 19L21 7l-1.41-1.41z"/></svg>`;
+        const t = setTimeout(() => {
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>`;
+          clearTimeout(t);
+        }, 1200);
+      });
+    });
+  }
+
+  const eleCodeGroups = document.querySelectorAll('.markdown-code-group');
+
+  const removeCodeBlockClass = (el) => {
+    const codeBlocks = el.querySelectorAll('.code-blocks-group');
+    codeBlocks.forEach((el) => {
+      el.classList.remove('active');
+    });
+  };
+
+  const removeTabClass = (el) => {
+    const codeBlocks = el.querySelectorAll('.markdown-group-tab-item');
+    codeBlocks.forEach((el) => {
+      el.classList.remove('active');
+    });
+  };
+
+  const initCodeGroupActive = (el) => {
+    const tabActive = el.querySelector('.markdown-group-tab-item.active');
+    const dataCodeGroupActive = tabActive?.dataset.codeGroup;
+
+    const codeActive = el.querySelector(`.code-blocks-group.${dataCodeGroupActive}`);
+
+    if (codeActive) {
+      codeActive.classList.add('active');
+    }
+  };
+
+  if (eleCodeGroups?.length) {
+    eleCodeGroups.forEach((el) => {
+      const btns = el.querySelectorAll('.markdown-group-tab-item');
+
+      initCodeGroupActive(el);
+
+      btns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const dataCodeGroup = btn.dataset.codeGroup;
+
+          removeCodeBlockClass(el);
+          removeTabClass(el);
+
+          const code = el.querySelector(`.code-blocks-group.${dataCodeGroup}`);
+          code.classList.add('active');
+          btn.classList.add('active');
+        });
+      });
+    });
+  }
+
+
+
+}, false);
+</script>
+
+<script type="module" defer>
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+
+  const mermaidElement = document.querySelectorAll('.markdown-it-mermaid');
+
+      if (mermaidElement?.length) {
+        mermaidElement.forEach(async (el) => {
+          const content = el?.textContent;
+          if (content) {
+            console.log(content)
+            const type = mermaid.detectType(content);
+            console.log(type)
+            const { svg } = await mermaid.render(type, content);
+            el.innerHTML = svg;
+            el.classList.remove('opacity-0');
+          }
+        });
+      }
+</script>
+</body>
 </html>

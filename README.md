@@ -17,12 +17,13 @@
 
 ## Features
 
-- Suport Syntax Highlighting
-- Suport Emoji
-- Suport Table of Contents
-- Suport Mermaid
-- Suport Katex
-- Suport Twoslash
+- Support Syntax Highlighting
+- Support Github Alert
+- Support Emoji
+- Support Table of Contents
+- Support Mermaid
+- Support Katex
+- Support Twoslash
 
 ## Demo
 
@@ -30,7 +31,7 @@
 
 ## API
 
-```
+```md
 --i: input file
 --o: output file
 --t: title
