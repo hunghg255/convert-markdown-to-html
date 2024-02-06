@@ -4,8 +4,9 @@ export const markdownToDocs = async (
   markdown: string,
   title: string,
   githubCorner: string,
+  isTwoSlash?: boolean,
 ): Promise<string> => {
-  const matterResult = await markdownToHtml(markdown);
+  const matterResult = await markdownToHtml(markdown, !!isTwoSlash);
 
   return `
 <!DOCTYPE html>

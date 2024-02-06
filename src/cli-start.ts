@@ -35,7 +35,7 @@ export async function startCli(cwd = process.cwd(), argv = process.argv) {
 
     const md = fs.readFileSync(input, 'utf8');
 
-    const content = await markdownToDocs(md, title, githubCornor);
+    const content = await markdownToDocs(md, title, githubCornor, false);
 
     fs.writeFileSync(path.resolve(cwd, output), content);
 

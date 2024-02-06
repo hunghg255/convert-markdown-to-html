@@ -1,6 +1,6 @@
 {
   "name": "convert-markdown-to-html",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -36,7 +36,7 @@
     "prepare": "git-scm-hooks",
     "changelog": "npx changeloggithub@latest --all true && git add CHANGELOG.md && git commit -m 'chore: update CHANGELOG.md'",
     "release": "bumpp -r && npm run changelog",
-    "gen-docs": "convert-markdown-to-html  -i README.md -o docs/index.html -t \"Convert Markdown to HTML\" -g https://github.com/hunghg255/convert-markdown-to-html"
+    "gen-docs": "npx convert-markdown-to-html --i README.md --o docs/index.html --t \"Convert Markdown to HTML\" --g \"https://github.com/hunghg255/convert-markdown-to-html\""
   },
   "author": "hunghg255",
   "devDependencies": {
@@ -78,12 +78,12 @@
     "commit-msg": "npm run verify-commit"
   },
   "keywords": [],
-  "homepage": "https://github.com/hunghg255/unbuild-package",
+  "homepage": "https://github.com/hunghg255/convert-markdown-to-html",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hunghg255/unbuild-package"
+    "url": "https://github.com/hunghg255/convert-markdown-to-html"
   },
   "bugs": {
-    "url": "https://github.com/hunghg255/unbuild-package/issues"
+    "url": "https://github.com/hunghg255/convert-markdown-to-html/issues"
   }
 }

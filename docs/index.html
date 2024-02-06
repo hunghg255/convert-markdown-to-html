@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>"Convert</title>
+  <title>Convert Markdown to HTML</title>
 
   <style>
   html,
@@ -780,7 +780,7 @@ hyphens: none; */
 </head>
 <body>
 <github-corners target="__blank" position="fixed"
-href="to"></github-corners>
+href="https://github.com/hunghg255/convert-markdown-to-html"></github-corners>
 
   <main>
     <p align="center">
@@ -797,6 +797,15 @@ href="to"></github-corners>
   <a href="https://github.com/hunghg255/convert-markdown-to-html/graphs/contributors" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg" alt="Contributors" /></a>
   <a href="https://github.com/hunghg255/convert-markdown-to-html/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/hunghg255/convert-markdown-to-html" alt="License" /></a>
 </p>
+<h2 id="features"><a class="anchor" href="#features">#</a>Features</h2>
+<ul>
+<li>Suport Syntax Highlighting</li>
+<li>Suport Emoji</li>
+<li>Suport Table of Contents</li>
+<li>Suport Mermaid</li>
+<li>Suport Katex</li>
+<li>Suport Twoslash</li>
+</ul>
 <h2 id="demo"><a class="anchor" href="#demo">#</a>Demo</h2>
 <p><a href="https://hunghg255.github.io/convert-markdown-to-html" target="_blank" rel="noopener">Demo</a></p>
 <h2 id="api"><a class="anchor" href="#api">#</a>API</h2>
@@ -805,10 +814,10 @@ href="to"></github-corners>
   
 
   <div class="code-blocks-pre">
-    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-"><span class="line"><span>-i: input file</span></span>
-<span class="line"><span>-o: output file</span></span>
-<span class="line"><span>-t: title</span></span>
-<span class="line"><span>-g: github link</span></span>
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-"><span class="line"><span>--i: input file</span></span>
+<span class="line"><span>--o: output file</span></span>
+<span class="line"><span>--t: title</span></span>
+<span class="line"><span>--g: github link</span></span>
 <span class="line"><span></span></span></code></pre>
 
     <span class="code-blocks-lang"></span>
@@ -823,7 +832,7 @@ href="to"></github-corners>
   
 
   <div class="code-blocks-pre">
-    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665">npx</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> convert-markdown-to-html  -i README.md -o docs/index.html -t </span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Convert Markdown to HTML</span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C99076;--shiki-dark:#C99076"> -g</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> https://github.com/hunghg255/convert-markdown-to-html</span></span>
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#80A665;--shiki-dark:#80A665">npx</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> convert-markdown-to-html@latest --i README.md --o docs/index.html --t </span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Convert Markdown to HTML</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#C99076;--shiki-dark:#C99076"> --g</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> "</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">https://github.com/hunghg255/convert-markdown-to-html</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span></span>
 <span class="line"></span></code></pre>
 
     <span class="code-blocks-lang">bash</span>
@@ -859,7 +868,7 @@ href="to"></github-corners>
 <span class="line"><span style="color:#FDAEB7;--shiki-dark:#FDAEB7;font-style:italic;--shiki-dark-font-style:italic">  ...</span></span>
 <span class="line"><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">  "</span><span style="color:#B8A965;--shiki-dark:#B8A965">scripts</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#666666;--shiki-dark:#666666">:</span><span style="color:#666666;--shiki-dark:#666666"> {</span></span>
 <span class="line"><span style="color:#FDAEB7;--shiki-dark:#FDAEB7;font-style:italic;--shiki-dark-font-style:italic">    ...</span></span>
-<span class="line"><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">    "</span><span style="color:#B8A965;--shiki-dark:#B8A965">gen-docs</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#666666;--shiki-dark:#666666">:</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> "</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">convert-markdown-to-html  -i README.md -o docs/index.html -t </span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Convert Markdown to HTML</span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> -g https://github.com/hunghg255/convert-markdown-to-html</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span></span>
+<span class="line"><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">    "</span><span style="color:#B8A965;--shiki-dark:#B8A965">gen-docs</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#666666;--shiki-dark:#666666">:</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> "</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">npx convert-markdown-to-html --i README.md --o docs/index.html --t </span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Convert Markdown to HTML</span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> --g </span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">https://github.com/hunghg255/convert-markdown-to-html</span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span></span>
 <span class="line"><span style="color:#666666;--shiki-dark:#666666">  },</span></span>
 <span class="line"><span style="color:#FDAEB7;--shiki-dark:#FDAEB7;font-style:italic;--shiki-dark-font-style:italic">  ...</span></span>
 <span class="line"><span style="color:#666666;--shiki-dark:#666666">}</span></span>

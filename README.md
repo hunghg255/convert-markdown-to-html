@@ -15,6 +15,15 @@
   <a href="https://github.com/hunghg255/convert-markdown-to-html/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/hunghg255/convert-markdown-to-html" alt="License" /></a>
 </p>
 
+## Features
+
+- Suport Syntax Highlighting
+- Suport Emoji
+- Suport Table of Contents
+- Suport Mermaid
+- Suport Katex
+- Suport Twoslash
+
 ## Demo
 
 [Demo](https://hunghg255.github.io/convert-markdown-to-html)
@@ -22,19 +31,21 @@
 ## API
 
 ```
--i: input file
--o: output file
--t: title
--g: github link
+--i: input file
+--o: output file
+--t: title
+--g: github link
 ```
 
 ## CLI
 
+- Option 1
+
 ```bash
-npx convert-markdown-to-html  -i README.md -o docs/index.html -t \"Convert Markdown to HTML\" -g https://github.com/hunghg255/convert-markdown-to-html
+npx convert-markdown-to-html@latest --i README.md --o docs/index.html --t "Convert Markdown to HTML" --g "https://github.com/hunghg255/convert-markdown-to-html"
 ```
 
-## Install
+- Option 2
 
 ```bash
 npm i convert-markdown-to-html@latest --save-dev
@@ -47,10 +58,26 @@ npm i convert-markdown-to-html@latest --save-dev
   ...
   "scripts": {
     ...
-    "gen-docs": "convert-markdown-to-html  -i README.md -o docs/index.html -t \"Convert Markdown to HTML\" -g https://github.com/hunghg255/convert-markdown-to-html"
+    "gen-docs": "convert-markdown-to-html --i README.md --o docs/index.html --t \"Convert Markdown to HTML\" --g \"https://github.com/hunghg255/convert-markdown-to-html\""
   },
   ...
 }
+```
+
+## Install
+
+```ts
+import { markdownToDocs } from 'convert-markdown-to-html';
+
+declare const markdownToDocs: (
+  markdown: string,
+  title: string,
+  githubCorner: string,
+  isTwoslash?: boolean,
+) => Promise<string>;
+
+const markdownContent = `# Hello World`;
+const html = markdownToDocs(markdownContent, 'Hello World', 'https://github.com', false);
 ```
 
 ### About

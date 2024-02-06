@@ -154,7 +154,7 @@ const MarkdownItGitHubAlerts1: MarkdownIt.PluginWithOptions<MarkdownItGitHubAler
   };
 };
 
-export const markdownToHtml = async (markdown: string): string => {
+export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): string => {
   const md = new MarkdownIt({
     html: true,
     linkify: true,
@@ -211,6 +211,34 @@ export const markdownToHtml = async (markdown: string): string => {
     },
   });
 
+  const transformers = [
+    transformerNotationDiff(),
+    transformerNotationHighlight(),
+    transformerNotationFocus(),
+    transformerNotationErrorLevel(),
+  ];
+
+  if (isTwoSlash) {
+    transformers.push(
+      transformerTwoslash({
+        renderer: rendererRich({
+          classExtra: 'ingore-twoslash',
+          processHoverDocs: (docs) => {
+            const contentHtml = [md.render(docs)].join('\n').trim().replaceAll('\r\n', '\n');
+
+            return contentHtml;
+          },
+          renderMarkdown: (content) => {
+            const hast = fromHtml(content, { space: 'p', fragment: true }).children;
+
+            return hast;
+          },
+        }),
+        explicitTrigger: true,
+      }),
+    );
+  }
+
   md.use(
     await markdownItShikiji({
       highlightLines: false,
@@ -218,28 +246,7 @@ export const markdownToHtml = async (markdown: string): string => {
         light: 'vitesse-dark',
         dark: 'vitesse-dark',
       },
-      transformers: [
-        transformerNotationDiff(),
-        transformerNotationHighlight(),
-        transformerNotationFocus(),
-        transformerNotationErrorLevel(),
-        transformerTwoslash({
-          renderer: rendererRich({
-            classExtra: 'ingore-twoslash',
-            processHoverDocs: (docs) => {
-              const contentHtml = [md.render(docs)].join('\n').trim().replaceAll('\r\n', '\n');
-
-              return contentHtml;
-            },
-            renderMarkdown: (content) => {
-              const hast = fromHtml(content, { space: 'p', fragment: true }).children;
-
-              return hast;
-            },
-          }),
-          explicitTrigger: true,
-        }),
-      ],
+      transformers,
     }),
   );
 
