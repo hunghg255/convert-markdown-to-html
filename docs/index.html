@@ -827,6 +827,9 @@ href="https://github.com/hunghg255/convert-markdown-to-html"></github-corners>
   </div>
 </div>
 <h2 id="cli"><a class="anchor" href="#cli">#</a>CLI</h2>
+<ul>
+<li>Option 1</li>
+</ul>
 
 <div class="code-blocks markdown-it-code-copy  code-blocks-group bash ">
   
@@ -841,7 +844,9 @@ href="https://github.com/hunghg255/convert-markdown-to-html"></github-corners>
     </button>
   </div>
 </div>
-<h2 id="install"><a class="anchor" href="#install">#</a>Install</h2>
+<ul>
+<li>Option 2</li>
+</ul>
 
 <div class="code-blocks markdown-it-code-copy  code-blocks-group bash ">
   
@@ -868,13 +873,38 @@ href="https://github.com/hunghg255/convert-markdown-to-html"></github-corners>
 <span class="line"><span style="color:#FDAEB7;--shiki-dark:#FDAEB7;font-style:italic;--shiki-dark-font-style:italic">  ...</span></span>
 <span class="line"><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">  "</span><span style="color:#B8A965;--shiki-dark:#B8A965">scripts</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#666666;--shiki-dark:#666666">:</span><span style="color:#666666;--shiki-dark:#666666"> {</span></span>
 <span class="line"><span style="color:#FDAEB7;--shiki-dark:#FDAEB7;font-style:italic;--shiki-dark-font-style:italic">    ...</span></span>
-<span class="line"><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">    "</span><span style="color:#B8A965;--shiki-dark:#B8A965">gen-docs</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#666666;--shiki-dark:#666666">:</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> "</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">npx convert-markdown-to-html --i README.md --o docs/index.html --t </span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Convert Markdown to HTML</span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> --g </span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">https://github.com/hunghg255/convert-markdown-to-html</span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span></span>
+<span class="line"><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">    "</span><span style="color:#B8A965;--shiki-dark:#B8A965">gen-docs</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span><span style="color:#666666;--shiki-dark:#666666">:</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> "</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">convert-markdown-to-html --i README.md --o docs/index.html --t </span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Convert Markdown to HTML</span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"> --g </span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">https://github.com/hunghg255/convert-markdown-to-html</span><span style="color:#C99076;--shiki-dark:#C99076">\"</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">"</span></span>
 <span class="line"><span style="color:#666666;--shiki-dark:#666666">  },</span></span>
 <span class="line"><span style="color:#FDAEB7;--shiki-dark:#FDAEB7;font-style:italic;--shiki-dark-font-style:italic">  ...</span></span>
 <span class="line"><span style="color:#666666;--shiki-dark:#666666">}</span></span>
 <span class="line"></span></code></pre>
 
     <span class="code-blocks-lang">json</span>
+    <button class="btn-copy">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
+    </button>
+  </div>
+</div>
+<h2 id="install"><a class="anchor" href="#install">#</a>Install</h2>
+
+<div class="code-blocks markdown-it-code-copy  code-blocks-group ts ">
+  
+
+  <div class="code-blocks-pre">
+    <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-ts"><span class="line"><span style="color:#4D9375;--shiki-dark:#4D9375">import</span><span style="color:#666666;--shiki-dark:#666666"> {</span><span style="color:#BD976A;--shiki-dark:#BD976A"> markdownToDocs</span><span style="color:#666666;--shiki-dark:#666666"> }</span><span style="color:#4D9375;--shiki-dark:#4D9375"> from</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">convert-markdown-to-html</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">declare const </span><span style="color:#80A665;--shiki-dark:#80A665">markdownToDocs</span><span style="color:#666666;--shiki-dark:#666666">: (</span></span>
+<span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">  markdown</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">string</span><span style="color:#666666;--shiki-dark:#666666">,</span></span>
+<span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">  title</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">string</span><span style="color:#666666;--shiki-dark:#666666">,</span></span>
+<span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">  githubCorner</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">string</span><span style="color:#666666;--shiki-dark:#666666">,</span></span>
+<span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">  isTwoslash</span><span style="color:#CB7676;--shiki-dark:#CB7676">?</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">boolean</span><span style="color:#666666;--shiki-dark:#666666">,</span></span>
+<span class="line"><span style="color:#666666;--shiki-dark:#666666">) => </span><span style="color:#5DA994;--shiki-dark:#5DA994">Promise</span><span style="color:#666666;--shiki-dark:#666666">&#x3C;</span><span style="color:#5DA994;--shiki-dark:#5DA994">string</span><span style="color:#666666;--shiki-dark:#666666">>;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">const </span><span style="color:#BD976A;--shiki-dark:#BD976A">markdownContent</span><span style="color:#666666;--shiki-dark:#666666"> =</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> `</span><span style="color:#C98A7D;--shiki-dark:#C98A7D"># Hello World</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">`</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>
+<span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">const </span><span style="color:#BD976A;--shiki-dark:#BD976A">html</span><span style="color:#666666;--shiki-dark:#666666"> =</span><span style="color:#80A665;--shiki-dark:#80A665"> markdownToDocs</span><span style="color:#666666;--shiki-dark:#666666">(</span><span style="color:#BD976A;--shiki-dark:#BD976A">markdownContent</span><span style="color:#666666;--shiki-dark:#666666">,</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">Hello World</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">,</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99"> '</span><span style="color:#C98A7D;--shiki-dark:#C98A7D">https://github.com</span><span style="color:#C98A7D99;--shiki-dark:#C98A7D99">'</span><span style="color:#666666;--shiki-dark:#666666">,</span><span style="color:#4D9375;--shiki-dark:#4D9375"> false</span><span style="color:#666666;--shiki-dark:#666666">);</span></span>
+<span class="line"></span></code></pre>
+
+    <span class="code-blocks-lang">ts</span>
     <button class="btn-copy">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#555555" d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V7q0-.425.288-.712T4 6q.425 0 .713.288T5 7v13h10q.425 0 .713.288T16 21q0 .425-.288.713T15 22zm4-6V4z"/></svg>
     </button>
