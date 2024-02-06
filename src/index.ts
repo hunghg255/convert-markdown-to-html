@@ -774,6 +774,10 @@ hyphens: none; */
     margin: 0 auto;
     padding: 48px 10px;
   }
+
+  .katex * {
+    font-family: initial !important;
+  }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css">
 

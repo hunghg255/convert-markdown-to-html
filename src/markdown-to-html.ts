@@ -21,10 +21,10 @@ import { full as MarkdownItEmoji } from 'markdown-it-emoji';
 import MarkdownItFootnote from 'markdown-it-footnote';
 import MarkdownItGitHubAlerts from 'markdown-it-github-alerts';
 import MarkdownItIns from 'markdown-it-ins';
-import MarkdownItKatex from 'markdown-it-katex';
 import mila from 'markdown-it-link-attributes';
 import MarkdownItMark from 'markdown-it-mark';
 import MarkdownItTable from 'markdown-it-multimd-table';
+import MarkdownItKatex from 'md-it-katex';
 
 import { svgCopy } from './svg';
 import { stringToSlug } from './utils';

@@ -1,6 +1,6 @@
 {
   "name": "convert-markdown-to-html",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -28,7 +28,7 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub",
-    "test:cli": "node dist/cli.mjs -i test/input/1.basic.md -o test/cli/readme.html -t Title -g https://github.com",
+    "test:cli": "node dist/cli.mjs --i README.md --o docs/index.html --t \"Convert Markdown to HTML\" --g \"https://github.com/hunghg255/convert-markdown-to-html\"",
     "lint": "eslint --ext .ts,.tsx src --color",
     "start": "esno src/markdown-to-docs.ts",
     "test": "vitest",
@@ -60,10 +60,10 @@
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-github-alerts": "^0.3.0",
     "markdown-it-ins": "^4.0.0",
-    "markdown-it-katex": "^2.0.3",
     "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-mark": "^4.0.0",
     "markdown-it-multimd-table": "^4.2.3",
+    "md-it-katex": "^0.0.1",
     "mermaid": "^10.6.1",
     "prettier": "^3.1.1",
     "tslib": "^2.6.2",
