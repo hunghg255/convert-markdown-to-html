@@ -17,17 +17,9 @@
 
 ## Demo
 
-[Demo](./test/cli/readme.html)
+[Demo](https://hunghg255.github.io/convert-markdown-to-html)
 
-## Install
-
-```bash
-npm i convert-markdown-to-html@latest --save-dev
-```
-
-## Setup
-
-## CLI (file package.json)
+## API
 
 ```
 -i: input file
@@ -36,12 +28,26 @@ npm i convert-markdown-to-html@latest --save-dev
 -g: github link
 ```
 
+## CLI
+
+```bash
+npx convert-markdown-to-html  -i README.md -o docs/index.html -t \"Convert Markdown to HTML\" -g https://github.com/hunghg255/convert-markdown-to-html
+```
+
+## Install
+
+```bash
+npm i convert-markdown-to-html@latest --save-dev
+```
+
+- Config (file package.json)
+
 ```json
 {
   ...
   "scripts": {
     ...
-    "markdown-to-html": "markdown-to-html -i test/input/1.basic.md -o test/cli/readme.html -t Title -g https://github.com",
+    "gen-docs": "convert-markdown-to-html  -i README.md -o docs/index.html -t \"Convert Markdown to HTML\" -g https://github.com/hunghg255/convert-markdown-to-html"
   },
   ...
 }

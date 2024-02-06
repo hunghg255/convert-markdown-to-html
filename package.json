@@ -1,6 +1,6 @@
 {
   "name": "convert-markdown-to-html",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -18,7 +18,7 @@
   },
   "sideEffects": false,
   "bin": {
-    "markdown-to-html": "./bin/cli.mjs"
+    "convert-markdown-to-html": "./bin/cli.mjs"
   },
   "files": [
     "bin",
@@ -28,14 +28,15 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub",
-    "test:cli": "esno src/cli.ts -i test/input/1.basic.md -o test/cli/readme.html -t Title -g https://github.com",
+    "test:cli": "node dist/cli.mjs -i test/input/1.basic.md -o test/cli/readme.html -t Title -g https://github.com",
     "lint": "eslint --ext .ts,.tsx src --color",
     "start": "esno src/markdown-to-docs.ts",
     "test": "vitest",
     "verify-commit": "verify-commit-msg",
     "prepare": "git-scm-hooks",
     "changelog": "npx changeloggithub@latest --all true && git add CHANGELOG.md && git commit -m 'chore: update CHANGELOG.md'",
-    "release": "bumpp -r && npm run changelog"
+    "release": "bumpp -r && npm run changelog",
+    "gen-docs": "convert-markdown-to-html  -i README.md -o docs/index.html -t \"Convert Markdown to HTML\" -g https://github.com/hunghg255/convert-markdown-to-html"
   },
   "author": "hunghg255",
   "devDependencies": {
