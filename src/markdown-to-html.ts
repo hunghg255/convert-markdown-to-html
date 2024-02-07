@@ -7,6 +7,8 @@ import {
   transformerNotationErrorLevel,
   transformerNotationHighlight,
   transformerNotationDiff,
+  transformerRenderWhitespace,
+  transformerNotationWordHighlight,
   // ...
 } from '@shikijs/transformers';
 import { rendererRich, transformerTwoslash } from '@shikijs/twoslash';
@@ -216,6 +218,8 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
     transformerNotationHighlight(),
     transformerNotationFocus(),
     transformerNotationErrorLevel(),
+    transformerRenderWhitespace(),
+    transformerNotationWordHighlight(),
   ];
 
   if (isTwoSlash) {

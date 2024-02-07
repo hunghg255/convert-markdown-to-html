@@ -230,6 +230,14 @@ export const markdownToDocs = async (
     filter: blur(0);
     opacity: 1;
   }
+
+  .highlighted-word {
+    background-color: #202127;
+    border: 1px solid #3c3f44;
+    padding: 1px 3px;
+    margin: -1px -3px;
+    border-radius: 4px;
+  }
 </style>
 
 <style>
@@ -305,9 +313,9 @@ body {
     --twoslash-underline-color: currentColor;
     --twoslash-popup-bg: #0f0f0f;
     --twoslash-popup-shadow: rgba(0, 0, 0, 0.08) 0px 1px 4px;
-    --twoslash-matched-color: inherit;
+    --twoslash-matched-color: #8cccd5;
     --twoslash-unmatched-color: #888;
-    --twoslash-cursor-color: #8888;
+    --twoslash-cursor-color: #8cccd5;
     --twoslash-error-color: #d45656;
     --twoslash-error-bg: #d4565620;
     --twoslash-tag-color: #3772cf;
@@ -425,11 +433,11 @@ body {
   }
 
   /* ===== Completeions ===== */
-  .twoslash .twoslash-completions-list {
+  .twoslash .twoslash-completion-cursor {
     position: relative;
   }
 
-  .twoslash .twoslash-completions-list ul {
+  .twoslash .twoslash-completion-list {
     user-select: none;
     position: absolute;
     top: 0;
@@ -443,17 +451,18 @@ body {
     margin: 3px 0 0 -1px;
     padding: 4px;
     z-index: 8;
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     gap: 4px;
     box-shadow: var(--twoslash-popup-shadow);
   }
 
-  .twoslash .twoslash-completions-list ul:hover {
+  .twoslash .twoslash-completion-list:hover {
     user-select: auto;
   }
 
-  .twoslash .twoslash-completions-list ul::before {
+  .twoslash .twoslash-completion-list::before {
     background-color: var(--twoslash-cursor-color);
     width: 2px;
     position: absolute;
@@ -463,7 +472,7 @@ body {
     content: ' ';
   }
 
-  .twoslash .twoslash-completions-list ul li {
+  .twoslash .twoslash-completion-list li {
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -471,24 +480,29 @@ body {
     line-height: 1em;
   }
 
-  .twoslash .twoslash-completions-list ul li span.twoslash-completions-unmatched {
+  .twoslash .twoslash-completion-list li span.twoslash-completion-unmatched {
     color: var(--twoslash-unmatched-color);
   }
 
-  .twoslash .twoslash-completions-list ul .deprecated {
+  .twoslash .twoslash-completion-list .deprecated {
     text-decoration: line-through;
     opacity: 0.5;
   }
 
-  .twoslash .twoslash-completions-list ul li span.twoslash-completions-matched {
+  .twoslash .twoslash-completion-list li span.twoslash-completions-matched {
     color: var(--twoslash-matched-color);
   }
 
   /* Icons */
-  .twoslash .twoslash-completions-list .twoslash-completions-icon {
+  .twoslash .twoslash-completion-list .twoslash-completions-icon {
     color: var(--twoslash-unmatched-color);
     width: 1em;
     flex: none;
+  }
+
+  .twoslash .twoslash-completion-list .twoslash-completions-icon svg {
+    width: 10px;
+    height: 10px;
   }
 
   /* Custom Tags */
@@ -550,6 +564,27 @@ body {
   .code-blocks-pre {
     position: relative;
     margin: 0 0 16px;
+  }
+
+  .code-blocks-pre :not(pre,h1,h2,h3,h4,h5,h6)>code {
+    color: #8cccd5;
+  }
+
+  .code-blocks-pre .tab,
+  .code-blocks-pre .space {
+    position: relative;
+  }
+
+  .code-blocks-pre .tab::before {
+    content: '⇥';
+    position: absolute;
+    opacity: 0.3;
+  }
+
+  .code-blocks-pre .space::before {
+    content: '·';
+    position: absolute;
+    opacity: 0.3;
   }
 
   .code-blocks-lang {
