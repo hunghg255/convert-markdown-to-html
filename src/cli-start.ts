@@ -3,6 +3,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { readConfig } from 'unreadconfig';
+
 import { markdownToDocs } from '.';
 
 const COLORS = {
@@ -22,25 +24,54 @@ const colorConsoleText = (text: string, color: keyof typeof COLORS) => {
   return console.log(coloredText);
 };
 
-const DEFAULT_FILE_NAME = 'markdown-to-html.html';
+const DEFAULT_FILE_NAME = 'mdocs';
+
+const argsToOptions = (args: string[]) => {
+  const options = {} as Record<string, string>;
+  for (let i = 0; i < args.length; i++) {
+    if (args[i].startsWith('--')) {
+      options[args[i].slice(2)] = args[i + 1];
+    }
+  }
+
+  return {
+    input: options?.i,
+    output: options?.o,
+    title: options?.t,
+    githubCornor: options?.g,
+    isTwoSlash: options?.ts,
+  };
+};
 
 export async function startCli(cwd = process.cwd(), argv = process.argv) {
   try {
-    const [node, script, ...args] = argv;
+    let optionsConfig: any = argsToOptions(argv);
 
-    const input = path.resolve(cwd, args[1]);
-    const output = args[3] || DEFAULT_FILE_NAME;
-    const title = args[5] || 'Markdown to HTML';
-    const githubCornor = args[7] || 'Markdown to HTML';
-    const isTwoSlash = args[9] || false;
+    if (!optionsConfig?.input) {
+      optionsConfig = readConfig(DEFAULT_FILE_NAME);
+    }
 
-    const md = fs.readFileSync(input, 'utf8');
+    if (!optionsConfig || !optionsConfig?.input) {
+      colorConsoleText('❌ Error: Not Found Config', 'red');
+      return;
+    }
 
-    const content = await markdownToDocs(md, title, githubCornor, !!isTwoSlash);
+    const md = fs.readFileSync(path.resolve(cwd, optionsConfig?.input), 'utf8');
 
-    fs.writeFileSync(path.resolve(cwd, output), content);
+    const content = await markdownToDocs(
+      md,
+      optionsConfig?.title,
+      optionsConfig?.githubCornor,
+      !!optionsConfig?.isTwoSlash,
+    );
 
-    colorConsoleText(`✅ File created successfully: ${path.resolve(cwd, output)}`, 'green');
+    fs.writeFileSync(path.resolve(cwd, optionsConfig?.output), content);
+
+    colorConsoleText(
+      `✅ File created successfully: ${path.resolve(cwd, optionsConfig?.output)}`,
+      'green',
+    );
+    console.log();
   } catch (error: any) {
     colorConsoleText('❌ Error: ' + error.message, 'red');
   }

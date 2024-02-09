@@ -1,5 +1,17 @@
 import { markdownToHtml } from './markdown-to-html';
 
+type TOptions = {
+  input: string;
+  output: string;
+  title: string;
+  githubCornor: string;
+  isTwoSlash: boolean;
+};
+
+export const defineConfig = (config: TOptions): TOptions => {
+  return config;
+};
+
 export const markdownToDocs = async (
   markdown: string,
   title: string,
@@ -1052,7 +1064,7 @@ import {computePosition, offset} from 'https://cdn.jsdelivr.net/npm/@floating-ui
           };
 
           function showTooltip() {
-            twpslashEle.style.display = 'block';
+            twpslashEle.style.display = 'inline-flex';
             update();
           }
           showTooltip();

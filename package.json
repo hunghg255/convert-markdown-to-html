@@ -64,6 +64,9 @@
     "markdown-it-mark": "^4.0.0",
     "markdown-it-multimd-table": "^4.2.3",
     "md-it-katex": "^0.0.1",
+    "mdast-util-from-markdown": "^2.0.0",
+    "mdast-util-gfm": "^3.0.0",
+    "mdast-util-to-hast": "^13.1.0",
     "mermaid": "^10.6.1",
     "prettier": "^3.1.1",
     "tslib": "^2.6.2",
@@ -85,5 +88,8 @@
   },
   "bugs": {
     "url": "https://github.com/hunghg255/convert-markdown-to-html/issues"
+  },
+  "dependencies": {
+    "unreadconfig": "^0.0.13"
   }
 }

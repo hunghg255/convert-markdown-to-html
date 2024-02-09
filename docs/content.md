@@ -267,6 +267,11 @@ const code = `console.log('hello')`;
 ```
 
 ```ts twoslash
+Number.parseInt('123', 10);
+//      ^|
+```
+
+```ts twoslash
 const obj = {
   boo: 1,
   bar: () => 2,

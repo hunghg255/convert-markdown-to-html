@@ -67,6 +67,35 @@ npm i convert-markdown-to-html@latest --save-dev
 
 ## Install
 
+- Create a file `mdocs.config.ts` in the root of the project
+
+```ts
+import { defineConfig } from 'convert-markdown-to-html';
+
+export default defineConfig({
+  input: 'docs/content.md',
+  output: 'docs/index.html',
+  title: 'My Docs',
+  githubCornor: 'https://github.com',
+  isTwoSlash: true,
+});
+```
+
+- Config (file package.json)
+
+```json
+{
+  ...
+  "scripts": {
+    ...
+    "gen-docs": "convert-markdown-to-html"
+  },
+  ...
+}
+```
+
+## Function
+
 ```ts
 import { markdownToDocs } from 'convert-markdown-to-html';
 
