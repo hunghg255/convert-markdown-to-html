@@ -36,7 +36,7 @@
     "prepare": "git-scm-hooks",
     "changelog": "npx changeloggithub@latest --all true && git add CHANGELOG.md && git commit -m 'chore: update CHANGELOG.md'",
     "prepublish": "npm run build",
-    "release": "bumpp -r",
+    "release": "bumpp -r && npm publish",
     "gen-docs": "npx convert-markdown-to-html@latest --i docs/content.md --o docs/index.html --t \"Convert Markdown to HTML\" --g \"https://github.com/hunghg255/convert-markdown-to-html\""
   },
   "author": "hunghg255",
