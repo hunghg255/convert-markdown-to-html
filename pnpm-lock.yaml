@@ -14,22 +14,22 @@ devDependencies:
     specifier: ^0.0.8
     version: 0.0.8(eslint@8.56.0)(typescript@5.3.3)
   '@shikijs/markdown-it':
-    specifier: 1.0.0
-    version: 1.0.0
+    specifier: 1.1.2
+    version: 1.1.2
   '@shikijs/transformers':
-    specifier: 1.0.0
-    version: 1.0.0
+    specifier: 1.1.2
+    version: 1.1.2
   '@shikijs/twoslash':
-    specifier: 1.0.0
-    version: 1.0.0(typescript@5.3.3)
+    specifier: 1.1.2
+    version: 1.1.2(typescript@5.3.3)
   '@types/markdown-it':
     specifier: ^13.0.7
     version: 13.0.7
   '@types/node':
-    specifier: ^18.19.3
-    version: 18.19.14
+    specifier: ^18.19.15
+    version: 18.19.15
   bumpp:
-    specifier: ^9.2.1
+    specifier: ^9.3.0
     version: 9.3.0
   esno:
     specifier: ^0.16.3
@@ -92,10 +92,10 @@ devDependencies:
     specifier: ^13.1.0
     version: 13.1.0
   mermaid:
-    specifier: ^10.6.1
+    specifier: ^10.8.0
     version: 10.8.0
   prettier:
-    specifier: ^3.1.1
+    specifier: ^3.2.5
     version: 3.2.5
   tslib:
     specifier: ^2.6.2
@@ -110,8 +110,8 @@ devDependencies:
     specifier: ^0.0.10
     version: 0.0.10
   vite:
-    specifier: ^5.0.12
-    version: 5.0.12(@types/node@18.19.14)
+    specifier: ^5.1.1
+    version: 5.1.1(@types/node@18.19.15)
   vitest:
     specifier: ^0.34.6
     version: 0.34.6
@@ -1313,29 +1313,29 @@ packages:
     dev: true
     optional: true
 
-  /@shikijs/core@1.0.0:
-    resolution: {integrity: sha512-UMKGMZ+8b88N0/n6DWwWth1PHsOaxjW+R2u+hzSiargZWTv+l3s1l8dhuIxUSsEUPlBDKLs2CSMiFZeviKQM1w==}
+  /@shikijs/core@1.1.2:
+    resolution: {integrity: sha512-ERVzNQz88ZkDqUpWeC57Kp+Kmx5RjqeDBR1M8AGWGom4yrkITiTfXCGmjchlDSw12MhDTuPYR4HVFW8uT61RaQ==}
     dev: true
 
-  /@shikijs/markdown-it@1.0.0:
-    resolution: {integrity: sha512-uyShrWv/+H0Cz232XI7/mcprGVEnVZ8/S/H4EkCC2+8VeAS5vDGm1SgFK48OwdC/7PfcBcfAkM9HwQzzz8bjEw==}
+  /@shikijs/markdown-it@1.1.2:
+    resolution: {integrity: sha512-A9kD0fpu4mfaJNwX31BTX7syMZ8pd37okzCMI2qLVWu1Fsacr5bct5aD3aLxPwXmgspD/xhWb2zUBkudOcTAZQ==}
     dependencies:
-      '@shikijs/transformers': 1.0.0
+      '@shikijs/transformers': 1.1.2
       markdown-it: 14.0.0
-      shiki: 1.0.0
+      shiki: 1.1.2
     dev: true
 
-  /@shikijs/transformers@1.0.0:
-    resolution: {integrity: sha512-US0Sc0OdH7eGL64BtfvX3XezPfqhqF5mPyBFLlbZqSpFt2/emnv9GveAWzELGsIuvXoJ6N1RjeAdmQx5Xni6BQ==}
+  /@shikijs/transformers@1.1.2:
+    resolution: {integrity: sha512-tldkUMW7RBkU2F6eXbiRMw3ja+hQer1EjwhD2NGOv6K0pgZdVp3JKjU8uisRtg65tyBqrVHq7zlLHVk7EKmUZA==}
     dependencies:
-      shiki: 1.0.0
+      shiki: 1.1.2
     dev: true
 
-  /@shikijs/twoslash@1.0.0(typescript@5.3.3):
-    resolution: {integrity: sha512-kwd4sGC49A1Vor4RRDimo1g2NZNzVYatoVfwOy5+p6gPZb/+lPB5eDsuk/F84Scau15tPyJoLB3/iDqCtkRUQQ==}
+  /@shikijs/twoslash@1.1.2(typescript@5.3.3):
+    resolution: {integrity: sha512-Jt8QAudENcCS7cgxjbXMpUCA7IAOy1kot+Qo5yyyLl9VwVKvZMW0BDrrigbOia8602X2Z76U6XEs9UXyD6LnsQ==}
     dependencies:
-      '@shikijs/core': 1.0.0
-      twoslash: 0.1.2(typescript@5.3.3)
+      '@shikijs/core': 1.1.2
+      twoslash: 0.2.2(typescript@5.3.3)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -1429,8 +1429,8 @@ packages:
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
     dev: true
 
-  /@types/node@18.19.14:
-    resolution: {integrity: sha512-EnQ4Us2rmOS64nHDWr0XqAD8DsO6f3XR6lf9UIIrZQpUzPVdN/oPuEzfDWNHSyXLvoGgjuEm/sPwFGSSs35Wtg==}
+  /@types/node@18.19.15:
+    resolution: {integrity: sha512-AMZ2UWx+woHNfM11PyAEQmfSxi05jm9OlkxczuHeEqmvwPkYj6MWv44gbzDPefYOLysTOFyI3ziiy2ONmUZfpA==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -5534,6 +5534,15 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /postcss@8.4.35:
+    resolution: {integrity: sha512-u5U8qYpBCpN13BsiEB0CbR1Hhh4Gc0zLFuedrHJKMctHCHAGrMdG0PRM/KErzAL3CU6/eckEtmHNB3x6e3c0vA==}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.7
+      picocolors: 1.0.0
+      source-map-js: 1.0.2
+    dev: true
+
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -5853,10 +5862,10 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  /shiki@1.0.0:
-    resolution: {integrity: sha512-rOUGJa3yFGgOrEoiELYxraoBbag3ZWf9bpodlr05Wjm85Scx8OIX+otdSefq9Pk7L47TKEzGodSQb4L38jka6A==}
+  /shiki@1.1.2:
+    resolution: {integrity: sha512-qNzFwTv5uhEDNUIwp7wHjsrffVeLbmOgWnM5mZZhoiz7G2qAUvqVfUzuWfieD45/YAKipzCtdV9SndacKtABow==}
     dependencies:
-      '@shikijs/core': 1.0.0
+      '@shikijs/core': 1.1.2
     dev: true
 
   /side-channel@1.0.4:
@@ -6214,12 +6223,17 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /twoslash@0.1.2(typescript@5.3.3):
-    resolution: {integrity: sha512-q0jnapnD3b0umNGCJCRlo6Em1oSFl2OBPwsXqhLzijtEzuORrGVrJffG7E1k1KPHFlwBSRX2q6yYA61etn5hSg==}
+  /twoslash-protocol@0.2.2:
+    resolution: {integrity: sha512-vwmMzoVkRk9yOElqn1xzCGwnv4rpfWHGtD177NkGc+A6KK5JhZtmugyW/T96g+Fwx2JrZB67FhAvdU5ptsXrUQ==}
+    dev: true
+
+  /twoslash@0.2.2(typescript@5.3.3):
+    resolution: {integrity: sha512-34VeMQiwiC6Jn2fSxo39z0BtINrOAeYb9WRfEQyW47cgMjw4NUuM3ym5qwL0g4xFoocuH1fKXlSl96EE2DghVQ==}
     peerDependencies:
       typescript: '*'
     dependencies:
       '@typescript/vfs': 1.5.0
+      twoslash-protocol: 0.2.2
       typescript: 5.3.3
     transitivePeerDependencies:
       - supports-color
@@ -6532,7 +6546,7 @@ packages:
       vfile-message: 4.0.2
     dev: true
 
-  /vite-node@0.34.6(@types/node@18.19.14):
+  /vite-node@0.34.6(@types/node@18.19.15):
     resolution: {integrity: sha512-nlBMJ9x6n7/Amaz6F3zJ97EBwR2FkzhBRxF5e+jE6LA3yi6Wtc2lyTij1OnDMIr34v5g/tVQtsVAzhT0jc5ygA==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -6542,7 +6556,7 @@ packages:
       mlly: 1.5.0
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.0.12(@types/node@18.19.14)
+      vite: 5.1.1(@types/node@18.19.15)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -6554,8 +6568,8 @@ packages:
       - terser
     dev: true
 
-  /vite@5.0.12(@types/node@18.19.14):
-    resolution: {integrity: sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==}
+  /vite@5.1.1(@types/node@18.19.15):
+    resolution: {integrity: sha512-wclpAgY3F1tR7t9LL5CcHC41YPkQIpKUGeIuT8MdNwNZr6OqOTLs7JX5vIHAtzqLWXts0T+GDrh9pN2arneKqg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -6582,9 +6596,9 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.19.14
+      '@types/node': 18.19.15
       esbuild: 0.19.12
-      postcss: 8.4.34
+      postcss: 8.4.35
       rollup: 4.9.6
     optionalDependencies:
       fsevents: 2.3.3
@@ -6623,7 +6637,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.11
       '@types/chai-subset': 1.3.5
-      '@types/node': 18.19.14
+      '@types/node': 18.19.15
       '@vitest/expect': 0.34.6
       '@vitest/runner': 0.34.6
       '@vitest/snapshot': 0.34.6
@@ -6642,8 +6656,8 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.6.0
       tinypool: 0.7.0
-      vite: 5.0.12(@types/node@18.19.14)
-      vite-node: 0.34.6(@types/node@18.19.14)
+      vite: 5.1.1(@types/node@18.19.15)
+      vite-node: 0.34.6(@types/node@18.19.15)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
