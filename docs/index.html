@@ -590,6 +590,30 @@ body {
     font-style: italic;
   }
 
+  .code-blocks-title .circle1,
+.code-blocks-title .circle2,
+.code-blocks-title .circle3 {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  transform: translateY(1px);
+}
+
+.code-blocks-title .circle1 {
+  background-color: #ff5f56;
+}
+
+.code-blocks-title .circle2 {
+  background-color: #ffbd2e;
+  margin: 0 5px;
+}
+
+.code-blocks-title .circle3 {
+  background-color: #27c93f;
+  margin: 0 8px 0 0;
+}
+
   .code-blocks-pre {
     position: relative;
     margin: 0 0 16px;
@@ -933,8 +957,8 @@ href="https://github.com/hunghg255/convert-markdown-to-html"></github-corners>
 <li>Config (file package.json)</li>
 </ul>
 
-<div class="code-blocks markdown-it-code-copy  code-blocks-group json ">
-  
+<div class="code-blocks markdown-it-code-copy code-blocks-title code-blocks-group json ">
+  <h5><span class="circle1"></span><span class="circle2"></span><span class="circle3"></span>package.json</h5>
 
   <div class="code-blocks-pre">
     <pre class="shiki shiki-themes vitesse-dark vitesse-dark" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-json"><span class="line"><span style="color: #179fff">{</span></span>
@@ -1293,7 +1317,7 @@ c100.7 8.3 195.3 44 280 108 55.3 42 101.7 93 139 153l9 14c2.7-4 5.7-8.7 9-14
 </ul>
 
 <div class="code-blocks markdown-it-code-copy code-blocks-title code-blocks-group ts ">
-  <h5>blog.ts</h5>
+  <h5><span class="circle1"></span><span class="circle2"></span><span class="circle3"></span>blog.ts</h5>
 
   <div class="code-blocks-pre">
     <pre class="shiki shiki-themes vitesse-dark vitesse-dark twoslash lsp" style="background-color:#121212;--shiki-dark-bg:#121212;color:#dbd7caee;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-ts"><span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#CB7676;--shiki-dark:#CB7676">var </span><span style="color:#BD976A;--shiki-dark:#BD976A">console</span><span style="color:#666666;--shiki-dark:#666666">: </span><span style="color:#5DA994;--shiki-dark:#5DA994">Console</span></span></code></span>console</span></span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665"><span class="twoslash-hover"><span class="twoslash-popup-container ingore-twoslash"><code class="twoslash-popup-code"><span class="line"><span style="color:#BD976A;--shiki-dark:#BD976A">Console</span><span style="color:#666666;--shiki-dark:#666666">.</span><span style="color:#80A665;--shiki-dark:#80A665">log</span><span style="color:#666666;--shiki-dark:#666666">(...</span><span style="color:#BD976A;--shiki-dark:#BD976A">data</span><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">: </span><span style="color:#BD976A;--shiki-dark:#BD976A">any</span><span style="color:#666666;--shiki-dark:#666666">[])</span><span style="color:#DBD7CAEE;--shiki-dark:#DBD7CAEE">: </span><span style="color:#CB7676;--shiki-dark:#CB7676">void</span></span></code><div class="twoslash-popup-docs"><p><a href="https://developer.mozilla.org/docs/Web/API/console/log" target="_blank" rel="noopener">MDN Reference</a></p></div></span>log</span></span><span style="color: #ffd700">(</span><span style="color:#4C9A91;--shiki-dark:#4C9A91">1</span><span style="color: #ffd700">)</span><span style="color:#666666;--shiki-dark:#666666">;</span></span>

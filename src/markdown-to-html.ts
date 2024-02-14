@@ -79,7 +79,7 @@ function renderCode(md, origRule) {
 
     return `
 <div class="code-blocks markdown-it-code-copy ${title ? 'code-blocks-title' : ''} ${bash || langName ? `code-blocks-group ${bash || langName} ${bash === 'npm' ? 'active' : ''}` : ''}">
-  ${title ? `<h5>${title}</h5>` : ''}
+  ${title ? `<h5><span class="circle1"></span><span class="circle2"></span><span class="circle3"></span>${title}</h5>` : ''}
 
   <div class="code-blocks-pre">
     ${origRendered}

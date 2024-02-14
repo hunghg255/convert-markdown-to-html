@@ -54,7 +54,7 @@ npm i convert-markdown-to-html@latest --save-dev
 
 - Config (file package.json)
 
-```json
+```json title=package.json
 {
   ...
   "scripts": {
