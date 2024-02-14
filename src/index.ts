@@ -561,6 +561,7 @@ body {
 .twoslash .twoslash-tag-line .twoslash-tag-icon {
   width: 1.1em;
   color: inherit;
+  display: flex;
 }
 .twoslash .twoslash-tag-line.twoslash-tag-error-line {
   background-color: var(--twoslash-error-bg);

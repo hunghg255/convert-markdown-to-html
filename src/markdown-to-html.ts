@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-array-reduce */
 /* eslint-disable unicorn/prefer-ternary */
 /* eslint-disable quotes */
 // @ts-nocheck
@@ -196,6 +197,89 @@ function renderMarkdownInline(this: any, md: string, context?: string): any[] {
   return children;
 }
 
+const isBracket = (str) => {
+  if (!str) {
+    return false;
+  }
+
+  return (
+    str.includes('(') ||
+    str.includes(')') ||
+    str.includes('[') ||
+    str.includes(']') ||
+    str.includes('{') ||
+    str.includes('}')
+  );
+};
+
+const transformerBracketPairColor = (options): ShikiTransformer => {
+  const colors = options?.color || {
+    '(': '#ffd700',
+    ')': '#ffd700',
+    '[': '#da70d6',
+    ']': '#da70d6',
+    '{': '#179fff',
+    '}': '#179fff',
+  };
+
+  return {
+    name: 'shiki-brackets-color',
+    root: (root) => {
+      const pre = root.children[0] as Element;
+      const code = pre.children[0] as Element;
+
+      code.children = code.children.reduce((acc, item) => {
+        if (item.type === 'element' && item.children?.length > 0) {
+          const newChild = [];
+          for (const child of item.children) {
+            if (child.children?.length) {
+              for (const child1 of child.children) {
+                if (isBracket(child1.value)) {
+                  // eslint-disable-next-line unicorn/prefer-spread
+                  const a = child1.value.split('');
+                  const b = a.map((it) => {
+                    const d = {
+                      ...child,
+                      children: [
+                        {
+                          type: 'text',
+                          value: it,
+                        },
+                      ],
+                    };
+
+                    if (isBracket(it)) {
+                      d.properties = {
+                        style: `color: ${colors[it]}`,
+                      };
+                    }
+
+                    return d;
+                  });
+
+                  newChild.push(...b);
+                } else {
+                  newChild.push(child);
+                }
+              }
+            } else {
+              newChild.push(child);
+            }
+          }
+
+          item.children = newChild;
+
+          acc.push(item);
+        } else {
+          acc.push(item);
+        }
+
+        return acc;
+      }, []);
+    },
+  };
+};
+
 export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): string => {
   const md = new MarkdownIt({
     html: true,
@@ -260,6 +344,16 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
     transformerNotationErrorLevel(),
     transformerRenderWhitespace(),
     transformerNotationWordHighlight(),
+    transformerBracketPairColor({
+      colors: {
+        '(': '#ffd700',
+        ')': '#ffd700',
+        '[': '#da70d6',
+        ']': '#da70d6',
+        '{': '#179fff',
+        '}': '#179fff',
+      },
+    }),
   ];
 
   if (isTwoSlash) {
