@@ -849,8 +849,20 @@ hyphens: none; */
     background-color: #232121;
   }
 
+  .heading-anchor {
+    position: relative;
+  }
+
+  .heading-anchor:hover .anchor {
+    opacity: 1;
+  }
+
   .anchor {
-    margin-right: 8px;
+    position: absolute;
+    padding: 0 5px 0 0;
+    left: -20px;
+    opacity: 0;
+    transition: all 300ms ease-in-out;
   }
 
   .opacity-0 {

@@ -33,6 +33,7 @@ import { gfmFromMarkdown } from 'mdast-util-gfm';
 import { defaultHandlers, toHast } from 'mdast-util-to-hast';
 
 import { svgCopy } from './svg';
+import theme from './theme.json';
 import { stringToSlug } from './utils';
 
 const getTitle = (info: string) => {
@@ -153,7 +154,7 @@ const MarkdownItGitHubAlerts1: MarkdownIt.PluginWithOptions<MarkdownItGitHubAler
 
   md.renderer.rules.heading_open = function (tokens, idx) {
     if (tags.has(tokens[idx].tag)) {
-      return `<${tokens[idx].tag} id="${tokens[idx].meta?.slug}"><a class="anchor" href="#${tokens[idx].meta?.slug}">#</a>`;
+      return `<${tokens[idx].tag} class="heading-anchor" id="${tokens[idx].meta?.slug}"><a class="anchor" href="#${tokens[idx].meta?.slug}">#</a>`;
     }
 
     return '';
@@ -382,8 +383,8 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
     await markdownItShikiji({
       highlightLines: false,
       themes: {
-        light: 'vitesse-dark',
-        dark: 'vitesse-dark',
+        light: theme,
+        dark: theme,
       },
       transformers,
     }),
