@@ -31,9 +31,9 @@ import MarkdownItKatex from 'md-it-katex';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { gfmFromMarkdown } from 'mdast-util-gfm';
 import { defaultHandlers, toHast } from 'mdast-util-to-hast';
+import theme from 'shikiji-themes/themes/lucy.js';
 
 import { svgCopy } from './svg';
-import theme from './theme.json';
 import { stringToSlug } from './utils';
 
 const getTitle = (info: string) => {

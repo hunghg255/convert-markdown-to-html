@@ -1,6 +1,6 @@
 {
   "name": "convert-markdown-to-html",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -91,6 +91,7 @@
     "url": "https://github.com/hunghg255/convert-markdown-to-html/issues"
   },
   "dependencies": {
+    "shikiji-themes": "^0.0.2",
     "unreadconfig": "^0.0.13"
   }
 }

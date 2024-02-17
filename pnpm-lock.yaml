@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  shikiji-themes:
+    specifier: ^0.0.2
+    version: 0.0.2
   unreadconfig:
     specifier: ^0.0.13
     version: 0.0.13
@@ -5867,6 +5870,10 @@ packages:
     dependencies:
       '@shikijs/core': 1.1.2
     dev: true
+
+  /shikiji-themes@0.0.2:
+    resolution: {integrity: sha512-x+pDqVa76TGUZQsQEuneL96Kt/kNU7Qyi5q9Q3xpRjqbft8T563iWbuBUPpHmmRJ+oFNDjIiGFJjD981GuLDNQ==}
+    dev: false
 
   /side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}

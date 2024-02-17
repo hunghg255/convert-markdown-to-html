@@ -500,52 +500,6 @@ body {
   white-space: pre-wrap;
 }
 
-/* .twoslash .twoslash-completion-list:hover {
-  user-select: auto;
-} */
-
-.twoslash .twoslash-completion-list::before {
-  background-color: var(--twoslash-cursor-color);
-  width: 2px;
-  position: absolute;
-  top: -1.6em;
-  height: 1.4em;
-  left: -1px;
-  content: ' ';
-}
-
-.twoslash .twoslash-completion-list li {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  gap: 0.25em;
-  line-height: 1em;
-}
-
-.twoslash .twoslash-completion-list li span.twoslash-completion-unmatched {
-  color: var(--twoslash-unmatched-color);
-}
-
-.twoslash .twoslash-completion-list .deprecated {
-  text-decoration: line-through;
-  opacity: 0.5;
-}
-
-.twoslash .twoslash-completion-list li span.twoslash-completions-matched {
-  color: var(--twoslash-matched-color);
-}
-
-/* Icons */
-.twoslash .twoslash-completion-list .twoslash-completions-icon {
-  color: var(--twoslash-unmatched-color);
-  width: 1em;
-  flex: none;
-}
-
-.twoslash .twoslash-completion-list .twoslash-completions-icon svg {
-  width: 10px;
-  height: 10px;
-}
 /* Custom Tags */
 .twoslash .twoslash-tag-line {
   position: relative;
@@ -579,16 +533,203 @@ body {
   color: var(--twoslash-tag-annotate-color);
 }
 
-.twoslash .twoslash-popup-docs-tags {
+:root {
+  --vp-c-bg: #1b1b1f;
+  --vp-c-text-1: rgba(255, 255, 245, 0.86);
+  --vp-c-text-2: rgba(235, 235, 245, 0.6);
+  --vp-font-family-base: 'Chinese Quotes', 'Inter var', 'Inter', ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  --vp-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+
+  --vp-code-font-size: 0.875em;
+  --vp-c-border: #3c3f44;
+  --vp-c-brand: #83d0da50;
+  --vp-z-index-local-nav: 20;
+
+  --twoslash-popup-bg: var(--vp-c-bg, inherit);
+  --twoslash-popup-color: var(--vp-c-text-1);
+  --twoslash-docs-color: var(--vp-c-text-1);
+  --twoslash-docs-font: var(--vp-font-family-base);
+  --twoslash-code-font: var(--vp-font-family-mono);
+  --twoslash-code-size: var(--vp-code-font-size);
+  --twoslash-underline-color: #8888;
+  --twoslash-border-color: var(--vp-c-border);
+  --twoslash-cursor-color: var(--vp-c-brand);
+  /* --twoslash-matched-color: var(--vp-c-brand); */
+  --twoslash-unmatched-color: var(--vp-c-text-2);
+  --vp-code-line-height: 1.7;
+}
+
+.v-popper--theme-twoslash.v-popper--theme-twoslash.v-popper--theme-twoslash {
+  z-index: calc(var(--vp-z-index-local-nav) - 1);
+}
+
+.v-popper--theme-twoslash.v-popper--theme-twoslash.v-popper--theme-twoslash .v-popper__inner {
+  background: var(--twoslash-popup-bg);
+  /* color: var(--twoslash-popup-color); */
+  border-color: var(--twoslash-border-color);
+  padding: 0;
+}
+
+.v-popper--theme-twoslash.v-popper--theme-twoslash.v-popper--theme-twoslash .v-popper__arrow-outer {
+  border-color: var(--twoslash-border-color);
+}
+
+.v-popper--theme-twoslash.v-popper--theme-twoslash.v-popper--theme-twoslash .v-popper__arrow-inner {
+  border-color: var(--twoslash-popup-bg);
+}
+
+.twoslash-popup-container {
+  transform: translateY(1.5em);
+}
+
+.twoslash-query-presisted .twoslash-popup-container {
+  transform: translateY(1.8em);
+}
+
+.twoslash .v-popper {
+  display: inline-block;
+}
+
+.twoslash-completion-list .twoslash-completions-icon {
+  color: var(--twoslash-unmatched-color) !important;
+}
+
+.twoslash-floating.twoslash-floating .twoslash-popup-code {
+  max-width: 600px;
+  display: block;
+  width: fit-content;
+  min-width: 100%;
+  padding: 6px 12px;
+  line-height: var(--vp-code-line-height);
+  font-size: var(--twoslash-code-size);
+  transition: color 0.5s;
+  white-space: pre-wrap;
+}
+
+.twoslash-floating.twoslash-floating .twoslash-popup-docs,
+.twoslash-floating.twoslash-floating .twoslash-popup-error {
+  padding: 0px 12px 0px 12px !important;
+  font-family: var(--twoslash-docs-font);
+  font-size: 0.9em;
+  max-height: 500px;
+  max-width: 700px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-wrap: balance;
+}
+
+.twoslash-floating.twoslash-floating .twoslash-popup-docs {
+  border-top: 1px solid var(--twoslash-border-color);
+  color: var(--twoslash-docs-color);
+}
+
+.twoslash-floating.twoslash-floating .twoslash-popup-error {
+  color: var(--twoslash-error-color);
+}
+
+.twoslash-floating.twoslash-floating .twoslash-popup-error.twoslash-error-level-warning {
+  color: var(--twoslash-warn-color);
+}
+
+.twoslash-floating.twoslash-floating .twoslash-popup-docs p,
+.twoslash-floating.twoslash-floating .twoslash-popup-error p {
+  margin: 0;
+  padding: 6px 0;
+  text-wrap: balance;
+}
+
+.twoslash-floating.twoslash-floating
+  .twoslash-popup-docs
+  pre
+  .twoslash-floating.twoslash-floating
+  .twoslash-popup-error
+  pre {
+  background-color: var(--vp-code-block-bg);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 6px -2px;
+  overflow-x: auto;
+}
+
+.twoslash-floating.twoslash-floating .twoslash-popup-docs-tags {
   display: flex;
   flex-direction: column;
   padding: 8px 12px !important;
-  color: var(--twoslash-docs-color);
 }
-.twoslash-popup-docs-tag-name {
+
+.twoslash-floating.twoslash-floating .twoslash-popup-docs-tags .twoslash-popup-docs-tag-name {
   font-family: var(--twoslash-code-font);
   color: var(--twoslash-unmatched-color);
   margin-right: 0.5em;
+}
+
+.twoslash-completion-cursor {
+  height: 1.2em;
+  width: 2px;
+  margin-bottom: -0.2em;
+  background: var(--twoslash-cursor-color);
+  display: inline-block;
+  user-select: none;
+}
+
+.twoslash-floating-show.twoslash-floating-show .v-popper__arrow-container {
+  display: none;
+}
+
+.twoslash-floating.twoslash-floating .twoslash-completion-list {
+  color: var(--twoslash-popup-color);
+  padding: 6px;
+  font-family: var(--twoslash-code-font);
+  font-size: var(--twoslash-code-size) !important;
+  margin: 0 !important;
+}
+
+/* Icons */
+.twoslash-floating.twoslash-floating .twoslash-completion-list .twoslash-completions-icon {
+  color: var(--twoslash-unmatched-color);
+  width: 1em;
+  flex: none;
+}
+
+.twoslash-floating.twoslash-floating
+  .twoslash-completion-list
+  li
+  span.twoslash-completion-unmatched {
+  color: var(--twoslash-unmatched-color);
+}
+
+.twoslash-floating.twoslash-floating .twoslash-completion-list .deprecated {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.twoslash-floating.twoslash-floating
+  .twoslash-completion-list
+  li
+  span.twoslash-completions-matched {
+  color: var(--twoslash-matched-color);
+}
+
+.twoslash-floating.twoslash-floating .twoslash-completion-list .twoslash-completions-icon svg {
+  width: 10px;
+  height: 10px;
+}
+
+.twoslash-floating.twoslash-floating .twoslash-completion-list li {
+  padding: 3px 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  line-height: 1em;
+}
+
+.twoslash-floating.twoslash-floating :not(pre, h1, h2, h3, h4, h5, h6) > code {
+  color: #8cccd5;
 }
 
 </style>
@@ -903,6 +1044,16 @@ hyphens: none; */
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-colors-light.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-colors-dark-media.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-base.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/floating-vue@5.2.2/dist/style.css">
+
+<script type="importmap">
+{
+  "imports": {
+    "@floating-ui/dom": "https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.3/+esm",
+    "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.41/vue.esm-browser.prod.js"
+  }
+}
+</script>
 
 <script type="module" src="https://unpkg.com/@uiw/github-corners/lib/index.js?module"></script>
 </head>
@@ -1024,9 +1175,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark' });
         mermaidElement.forEach(async (el) => {
           const content = el?.textContent;
           if (content) {
-            console.log(content)
             const type = mermaid.detectType(content);
-            console.log(type)
             const { svg } = await mermaid.render(type, content);
             el.innerHTML = svg;
             el.classList.remove('opacity-0');
@@ -1035,116 +1184,108 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark' });
       }
 </script>
 <script type="module" defer>
-import {computePosition, offset} from 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1/+esm';
-
-
+import { createTooltip, recomputeAllPoppers } from 'https://cdn.jsdelivr.net/npm/floating-vue/dist/floating-vue.mjs';
 
       const eleTwoslash = document.querySelectorAll(
         '.twoslash-hover:not(.twoslash-query-presisted)',
       );
       const eleTwoslashCursor = document.querySelectorAll('.twoslash-completion-cursor');
       const eleTwoslashPersisted = document.querySelectorAll('.twoslash-query-presisted');
-      const updates = [];
+
+      if (typeof window !== 'undefined') {
+        // Recompute poppers when clicking on a tab
+        window.addEventListener(
+          'click',
+          (e) => {
+            // const path = e.composedPath();
+            // if (
+            //   path.some(
+            //     (el: any) =>
+            //       el?.classList?.contains?.('vp-code-group') || el?.classList?.contains?.('tabs'),
+            //   )
+            // )
+            //   recomputeAllPoppers();
+            recomputeAllPoppers();
+          },
+          { passive: true },
+        );
+      }
+
+      const isMobile =
+        typeof navigator !== 'undefined' &&
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
       if (eleTwoslash?.length) {
         eleTwoslash.forEach((el) => {
           const twpslashEle = el.querySelector('.twoslash-popup-container');
 
-          const update = () => {
-            computePosition(el, twpslashEle, {
-              strategy: 'fixed',
+          const tooltip = createTooltip(
+            el,
+            {
+              content: twpslashEle.outerHTML,
+              html: true,
+              triggers: isMobile ? ['touch'] : ['hover', 'touch'],
+              popperTriggers: isMobile ? ['touch'] : ['hover', 'touch'],
               placement: 'bottom-start',
-              middleware: [offset(0)],
-            }).then(({ x, y }) => {
-              Object.assign(twpslashEle.style, {
-                left: \`\${x}px\`,
-                top: \`\${y}px\`,
-              });
-            });
-          };
-
-          function showTooltip() {
-            twpslashEle.style.display = 'block';
-            twpslashEle.style.zIndex = '9999';
-            update();
-          }
-
-          function hideTooltip() {
-            twpslashEle.style.display = '';
-          }
-
-          [
-            ['mouseenter', showTooltip],
-            ['mouseleave', hideTooltip],
-            ['focus', showTooltip],
-            ['blur', hideTooltip],
-          ].forEach(([event, listener]) => {
-            el.addEventListener(event, listener);
-          });
+              overflowPadding: 10,
+              delay: 0,
+              handleResize: false,
+              autoHide: true,
+              instantMove: true,
+              flip: false,
+              arrowPadding: 8,
+              autoBoundaryMaxSize: true,
+              popperClass: 'v-popper--theme-twoslash v-popper--theme-dropdown twoslash-floating',
+            },
+            {},
+          );
         });
       }
       if (eleTwoslashCursor?.length) {
         eleTwoslashCursor.forEach((el) => {
           const twpslashEle = el.querySelector('.twoslash-completion-list');
 
-          const update = () => {
-            computePosition(el, twpslashEle, {
-              strategy: 'fixed',
+          const tooltip = createTooltip(
+            el,
+            {
+              content: twpslashEle.outerHTML,
+              html: true,
+              triggers: ['click'],
+              popperTriggers: ['click'],
               placement: 'bottom-start',
-              middleware: [offset(1)],
-            }).then(({ x, y }) => {
-              Object.assign(twpslashEle.style, {
-                left: \`\${x}px\`,
-                top: \`\${y}px\`,
-              });
-            });
-          };
+              autoHide: false,
+              distance: 0,
+              arrowOverflow: true,
+              popperClass:
+                'v-popper--theme-twoslash v-popper--theme-dropdown twoslash-floating twoslash-floating-show',
+            },
+            {},
+          );
 
-          function showTooltip() {
-            twpslashEle.style.display = 'inline-flex';
-            update();
-          }
-          showTooltip();
-          updates.push(update);
+          tooltip.show();
         });
       }
       if (eleTwoslashPersisted?.length) {
         eleTwoslashPersisted.forEach((el) => {
           const twpslashEle = el.querySelector('.twoslash-popup-container');
 
-          const update = () => {
-            computePosition(el, twpslashEle, {
-              strategy: 'fixed',
+          const tooltip = createTooltip(
+            el,
+            {
+              content: twpslashEle.outerHTML,
+              html: true,
+              triggers: ['click'],
+              popperTriggers: ['click'],
               placement: 'bottom-start',
-              middleware: [offset(1)],
-            }).then(({ x, y }) => {
-              Object.assign(twpslashEle.style, {
-                left: \`\${x}px\`,
-                top: \`\${y}px\`,
-              });
-            });
-          };
-          updates.push(update);
+              autoHide: false,
+              popperClass: 'v-popper--theme-twoslash v-popper--theme-dropdown twoslash-floating',
+            },
+            {},
+          );
 
-          function showTooltip() {
-            twpslashEle.style.display = 'block';
-            update();
-          }
-
-          showTooltip();
+          tooltip.show();
         });
       }
-
-      window.addEventListener('scroll', () => {
-        updates.forEach((update) => {
-          update();
-        });
-      });
-      window.addEventListener('resize', () => {
-        updates.forEach((update) => {
-          update();
-        });
-      });
 </script>
 </body>
 </html>
