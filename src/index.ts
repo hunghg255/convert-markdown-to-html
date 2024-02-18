@@ -1070,15 +1070,6 @@ hyphens: none; */
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-base.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/floating-vue@5.2.2/dist/style.css">
 
-<script type="importmap">
-{
-  "imports": {
-    "@floating-ui/dom": "https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.3/+esm",
-    "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.41/vue.esm-browser.prod.js"
-  }
-}
-</script>
-
 <script type="module" src="https://unpkg.com/@uiw/github-corners/lib/index.js?module"></script>
 </head>
 <body>
@@ -1208,7 +1199,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark' });
       }
 </script>
 <script type="module" defer>
-import { createTooltip, recomputeAllPoppers } from 'https://cdn.jsdelivr.net/npm/floating-vue/dist/floating-vue.mjs';
+import { createTooltip, recomputeAllPoppers } from 'https://cdn.jsdelivr.net/npm/floating-ui@5.2.4/dist/floating-ui.mjs';
 
       const eleTwoslash = document.querySelectorAll(
         '.twoslash-hover:not(.twoslash-query-presisted)',
