@@ -1023,8 +1023,8 @@ hyphens: none; */
 
   .anchor {
     position: absolute;
-    padding: 0 5px 0 0;
-    left: -20px;
+    padding: 0 2px 0 0;
+    right: 100%;
     opacity: 0;
     transition: all 300ms ease-in-out;
   }
@@ -1050,7 +1050,7 @@ hyphens: none; */
   main {
     max-width: 890px;
     margin: 0 auto;
-    padding: 48px 10px;
+    padding: 48px 22px;
   }
 
   .katex * {
