@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import { defineBuildConfig } from 'unbuild';
 
 export default defineBuildConfig({
@@ -11,6 +12,14 @@ export default defineBuildConfig({
     inlineDependencies: true,
     esbuild: {
       minify: false,
+    },
+  },
+  hooks: {
+    'rollup:done': async () => {
+      // eslint-disable-next-line no-console
+      const local = await fs.readFile(new URL('./src/style.css', import.meta.url), 'utf-8');
+
+      await fs.writeFile(new URL('./dist/style.css', import.meta.url), local);
     },
   },
   failOnWarn: false,

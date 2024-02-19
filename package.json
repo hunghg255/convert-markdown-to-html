@@ -1,6 +1,6 @@
 {
   "name": "convert-markdown-to-html",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -23,6 +23,7 @@
   "files": [
     "bin",
     "dist",
+    "dist/*.css",
     "LICENSE"
   ],
   "scripts": {
