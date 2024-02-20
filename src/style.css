@@ -337,14 +337,6 @@ body {
   border-radius: 4px;
 }
 
-/* Twoslash */
-/* Respect people's wishes to not have animations */
-@media (prefers-reduced-motion: reduce) {
-  .twoslash * {
-    transition: none !important;
-  }
-}
-
 /* ===== Hover Info ===== */
 .twoslash:hover .twoslash-hover {
   border-color: var(--twoslash-underline-color);
@@ -358,67 +350,7 @@ body {
 }
 
 .twoslash .twoslash-popup-container {
-  /* position: absolute;
-  top: 2px;
-  opacity: 0; */
-  display: inline-block;
-  /* transform: translateY(1.1em); */
-  background: var(--twoslash-popup-bg);
-  border: 1px solid var(--twoslash-border-color);
-  transition: opacity 0.3s;
-  border-radius: 4px;
-  padding: 4px 6px;
-  pointer-events: none;
-  z-index: 10;
-  user-select: none;
-  text-align: left;
-  box-shadow: var(--twoslash-popup-shadow);
-
-  /* position: fixed; */
-  width: max-content;
-  position: fixed;
-  top: 0;
-  left: 0;
   display: none;
-  max-width: 600px;
-  white-space: pre-wrap;
-}
-
-.twoslash .twoslash-query-presisted .twoslash-popup-container {
-  z-index: 9;
-  /* transform: translateY(1.5em); */
-}
-
-.twoslash .twoslash-hover:hover .twoslash-popup-container,
-.twoslash .twoslash-query-presisted .twoslash-popup-container {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.twoslash .twoslash-popup-container:hover {
-  user-select: auto;
-}
-
-.twoslash .twoslash-popup-arrow {
-  position: absolute;
-  top: -4px;
-  left: 1em;
-  border-top: 1px solid var(--twoslash-border-color);
-  border-right: 1px solid var(--twoslash-border-color);
-  background: var(--twoslash-popup-bg);
-  transform: rotate(-45deg);
-  width: 6px;
-  height: 6px;
-  pointer-events: none;
-}
-
-.twoslash .twoslash-popup-docs {
-  color: var(--twoslash-jsdoc-color);
-  padding: 6px 10px;
-  font-family: sans-serif;
-  font-size: 0.8em;
-  margin: 0 -6px;
-  border-top: 1px solid var(--twoslash-border-color);
 }
 
 .twoslash.twoslash h1,
@@ -454,38 +386,8 @@ body {
   padding-bottom: 2px;
 }
 
-/* ===== Completeions ===== */
-.twoslash .twoslash-completion-cursor {
-  position: relative;
-}
-
 .twoslash .twoslash-completion-list {
-  /* user-select: none; */
-  /* position: absolute;
-  top: 0;
-  left: 0; */
-  /* transform: translate(0, 1.2em); */
-  display: inline-block;
-  width: 240px;
-  background: var(--twoslash-popup-bg);
-  border: 1px solid var(--twoslash-border-color);
-  font-size: 0.8rem;
-  margin: 3px 0 0 -1px;
-  padding: 4px;
-  z-index: 8;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  box-shadow: var(--twoslash-popup-shadow);
-
-  /* position: fixed; */
-  position: fixed;
-  top: 0;
-  left: 0;
   display: none;
-  /* max-width: 600px; */
-  white-space: pre-wrap;
 }
 
 /* Custom Tags */
@@ -538,14 +440,6 @@ body {
 .v-popper--theme-twoslash.v-popper--theme-twoslash .v-popper__arrow-inner {
   border-color: var(--twoslash-popup-bg);
   visibility: visible;
-}
-
-.twoslash-popup-container {
-  transform: translateY(1.5em);
-}
-
-.twoslash-query-presisted .twoslash-popup-container {
-  transform: translateY(1.8em);
 }
 
 .twoslash .v-popper {
@@ -621,14 +515,19 @@ body {
   line-height: var(--vp-code-line-height);
 }
 
-.twoslash-popup-docs.twoslash-popup-docs code {
+.twoslash-popup-docs.twoslash-popup-docs .twoslash-popup-docs-tag-value code {
   color: #8cccd5;
   border-radius: 4px;
   padding: 3px 6px;
   background-color: rgba(101, 117, 133, 0.16);
-  transition:
-    color 0.25s,
-    background-color 0.5s;
+}
+
+.twoslash-popup-docs.twoslash-popup-docs pre {
+  overflow: auto;
+}
+
+.twoslash-popup-docs.twoslash-popup-docs pre {
+  padding: 20px;
 }
 
 .twoslash-popup-docs.twoslash-popup-docs a {
@@ -642,6 +541,7 @@ body {
   font-family: var(--twoslash-code-font);
   color: var(--twoslash-unmatched-color);
   margin-right: 0.5em;
+  font-style: italic;
 }
 
 .twoslash-completion-cursor {
@@ -757,27 +657,27 @@ body {
   margin: 0 8px 0 0;
 }
 
-.code-blocks-pre {
+pre code {
   position: relative;
   margin: 0 0 16px;
 }
 
-.code-blocks-pre :not(pre, h1, h2, h3, h4, h5, h6) > code {
+pre code :not(pre, h1, h2, h3, h4, h5, h6) > code {
   color: #8cccd5;
 }
 
-.code-blocks-pre .tab,
-.code-blocks-pre .space {
+pre code .tab,
+pre code .space {
   position: relative;
 }
 
-.code-blocks-pre .tab::before {
+pre code .tab::before {
   content: '⇥';
   position: absolute;
   opacity: 0.3;
 }
 
-.code-blocks-pre .space::before {
+pre code .space::before {
   content: '·';
   position: absolute;
   opacity: 0.3;

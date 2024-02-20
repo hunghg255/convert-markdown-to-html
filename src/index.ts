@@ -28,7 +28,7 @@ export const markdownToDocs = async (
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title || 'Documentation'}</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/convert-markdown-to-html/dist/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/convert-markdown-to-html@0.0.30/dist/style.css">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-light.css">

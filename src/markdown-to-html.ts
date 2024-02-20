@@ -288,6 +288,12 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
     xhtmlOut: true,
   });
 
+  const mdDocs = new MarkdownIt({
+    html: true,
+    linkify: true,
+    xhtmlOut: true,
+  });
+
   md.use(MarkdownItGitHubAlerts1);
   md.use(MarkdownItKatex);
   md.use(MarkdownItGitHubAlerts);
@@ -338,6 +344,20 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
     },
   });
 
+  mdDocs.use(MarkdownItEmoji);
+  mdDocs.use(MarkdownItAbbr);
+  mdDocs.use(MarkdownItDeflist);
+  mdDocs.use(MarkdownItFootnote);
+  mdDocs.use(MarkdownItIns);
+  mdDocs.use(MarkdownItMark);
+
+  mdDocs.use(mila, {
+    attrs: {
+      target: '_blank',
+      rel: 'noopener',
+    },
+  });
+
   const transformers = [
     transformerNotationDiff(),
     transformerNotationHighlight(),
@@ -357,13 +377,24 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
     }),
   ];
 
+  mdDocs.use(
+    await markdownItShikiji({
+      highlightLines: false,
+      themes: {
+        light: theme,
+        dark: theme,
+      },
+      transformers,
+    }),
+  );
+
   if (isTwoSlash) {
     transformers.push(
       transformerTwoslash({
         renderer: rendererRich({
           classExtra: 'ingore-twoslash',
           processHoverDocs: (docs) => {
-            const contentHtml = [md.render(docs)].join('\n').trim().replaceAll('\r\n', '\n');
+            const contentHtml = [mdDocs.render(docs)].join('\n').trim().replaceAll('\r\n', '\n');
 
             return contentHtml;
           },

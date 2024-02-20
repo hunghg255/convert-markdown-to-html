@@ -1,6 +1,6 @@
 {
   "name": "convert-markdown-to-html",
-  "version": "0.0.27",
+  "version": "0.0.30",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -43,9 +43,9 @@
   "author": "hunghg255",
   "devDependencies": {
     "@hunghg255/eslint-config-ts": "^0.0.8",
-    "@shikijs/markdown-it": "1.1.2",
-    "@shikijs/transformers": "1.1.2",
-    "@shikijs/twoslash": "1.1.2",
+    "@shikijs/markdown-it": "1.1.6",
+    "@shikijs/transformers": "1.1.6",
+    "@shikijs/twoslash": "1.1.6",
     "@types/markdown-it": "^13.0.7",
     "@types/node": "^18.19.15",
     "bumpp": "^9.3.0",

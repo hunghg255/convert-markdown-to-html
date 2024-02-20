@@ -248,14 +248,25 @@ sequenceDiagram
 - Twoslash
 
 ```ts twoslash title=blog.ts
+import MarkdownIt from 'markdown-it';
+
 console.log(1);
 console.log(2);
-//     ^?
+//      ^?
+```
+
+```ts twoslash title=blog.ts
+import { getHighlighterCore } from '@shikijs/core';
+
+const highlighter = await getHighlighterCore({});
+
+import { transformerTwoslash as transformerTwoslashVue } from '@shikijs/vitepress-twoslash';
 
 import { rendererRich, transformerTwoslash } from '@shikijs/twoslash';
 
 transformerTwoslash({
   renderer: rendererRich(), // <--
+  explicitTrigger: true, // <--
 });
 
 import {

@@ -1,0 +1,23 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "convert-markdown-to-html"
+  },
+  "keywords": [],
+  "author": "hunghg255",
+  "license": "ISC",
+  "devDependencies": {
+    "convert-markdown-to-html": "^0.0.30",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@shikijs/core": "^1.1.6",
+    "@shikijs/transformers": "^1.1.6",
+    "@shikijs/twoslash": "^1.1.6",
+    "@shikijs/vitepress-twoslash": "^1.1.6",
+    "markdown-it": "^14.0.0"
+  }
+}
