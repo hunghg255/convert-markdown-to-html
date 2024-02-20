@@ -657,12 +657,12 @@ body {
   margin: 0 8px 0 0;
 }
 
-pre code {
+.code-blocks-pre {
   position: relative;
   margin: 0 0 16px;
 }
 
-pre code :not(pre, h1, h2, h3, h4, h5, h6) > code {
+.code-blocks-pre :not(pre, h1, h2, h3, h4, h5, h6) > code {
   color: #8cccd5;
 }
 
