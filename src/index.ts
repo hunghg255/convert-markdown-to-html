@@ -1,11 +1,26 @@
+/* eslint-disable indent */
+/* eslint-disable unicorn/consistent-destructuring */
 import { markdownToHtml } from './markdown-to-html';
+import { socialsIcon } from './svg';
 
 type TOptions = {
   input: string;
   output: string;
-  title: string;
-  githubCornor: string;
   isTwoSlash: boolean;
+
+  title: string;
+  description?: string;
+
+  logo?: string;
+  socialLinks?: {
+    icon?: 'twitter' | 'github';
+    url?: string;
+  }[];
+  footer?: {
+    message?: string;
+    copyright?: string;
+  };
+  head?: Array<[string, Record<string, string>]>;
 };
 
 export const defineConfig = (config: TOptions): TOptions => {
@@ -14,10 +29,9 @@ export const defineConfig = (config: TOptions): TOptions => {
 
 export const markdownToDocs = async (
   markdown: string,
-  title: string,
-  githubCorner: string,
-  isTwoSlash?: boolean,
+  options: Partial<TOptions>,
 ): Promise<string> => {
+  const { title, description, logo, isTwoSlash } = options;
   const matterResult = await markdownToHtml(markdown, !!isTwoSlash);
 
   return `
@@ -27,9 +41,19 @@ export const markdownToDocs = async (
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title || 'Documentation'}</title>
+  <meta name="description" content="${description || ''}">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/convert-markdown-to-html@0.0.31/dist/style.css">
+  ${options?.head
+    ?.map(([tag, attrs]) => {
+      return `<${tag} ${Object.keys(attrs)
+        .map((it) => {
+          return `${it}="${attrs[it]}"`;
+        })
+        .join(' ')} />`;
+    })
+    .join('')}
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/convert-markdown-to-html@0.0.32/dist/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-light.css">
 <link rel="stylesheet"
@@ -41,15 +65,49 @@ export const markdownToDocs = async (
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-base.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/floating-ui@5.2.4/dist/style.css">
 
-<script type="module" src="https://unpkg.com/@uiw/github-corners/lib/index.js?module"></script>
 </head>
 <body>
-<github-corners target="__blank" position="fixed"
-href="${githubCorner}"></github-corners>
+  <header>
+    <div>
+    <a href="/">
+      <img src="${logo || 'https://avatar1.vercel.app/avatar/vercel.svg?text=LG'}" alt="${title || 'Documentation'}" />
+    </a>
 
-  <main>
+    <nav>
+      <ul>
+        ${options?.socialLinks
+          ?.map((link) => `<li><a href="${link.url}">${socialsIcon[`${link.icon}`]}</a></li>`)
+          .join('')}
+      </ul>
+    </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div >
+    <div class="container">
     ${matterResult}
+    </div>
+
+    <aside class="aside">
+      <div>
+        <div class="content">
+          <div>On this page</div>
+          <ul id="asideContent">
+
+          </ul>
+        </div>
+      </div>
+    </aside>
+    </div>
   </main>
+
+  <footer>
+    <div>
+    <p>${options?.footer?.message || ''}</p>
+    <p>${options?.footer?.copyright || ''}</p>
+    </div>
+  </footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -272,6 +330,19 @@ import { createTooltip, recomputeAllPoppers } from 'https://cdn.jsdelivr.net/npm
           tooltip.show();
         });
       }
+</script>
+<script>
+const asideContent = document.getElementById('asideContent');
+const headers = document.querySelectorAll('h2.heading-anchor');
+
+headers.forEach((header) => {
+  const id = header.id;
+  const text = header.textContent;
+
+  const li = document.createElement('li');
+  li.innerHTML = \`<a href="#\${id}">$\{text.slice(1)}</a>\`;
+  asideContent.appendChild(li);
+});
 </script>
 </body>
 </html>

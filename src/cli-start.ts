@@ -37,8 +37,14 @@ const argsToOptions = (args: string[]) => {
   return {
     input: options?.i,
     output: options?.o,
+
     title: options?.t,
-    githubCornor: options?.g,
+    socialLinks: [
+      {
+        icon: 'github',
+        url: options?.g,
+      },
+    ],
     isTwoSlash: options?.ts,
   };
 };
@@ -58,12 +64,7 @@ export async function startCli(cwd = process.cwd(), argv = process.argv) {
 
     const md = fs.readFileSync(path.resolve(cwd, optionsConfig?.input), 'utf8');
 
-    const content = await markdownToDocs(
-      md,
-      optionsConfig?.title,
-      optionsConfig?.githubCornor,
-      !!optionsConfig?.isTwoSlash,
-    );
+    const content = await markdownToDocs(md, optionsConfig);
 
     fs.writeFileSync(path.resolve(cwd, optionsConfig?.output), content);
 

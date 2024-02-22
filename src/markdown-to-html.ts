@@ -13,7 +13,6 @@ import {
   // ...
 } from '@shikijs/transformers';
 import { rendererRich, transformerTwoslash } from '@shikijs/twoslash';
-import matter from 'gray-matter';
 import { fromHtml } from 'hast-util-from-html';
 import MarkdownIt from 'markdown-it';
 import MarkdownItAbbr from 'markdown-it-abbr';
@@ -132,7 +131,6 @@ const MarkdownItGitHubAlerts1: MarkdownIt.PluginWithOptions<MarkdownItGitHubAler
         while (tokens[i]?.type !== 'heading_close' && i <= tokens.length) {
           i += 1;
         }
-        // const close = tokens[i];
         const endIndex = i;
         const firstContent = tokens
           .slice(startIndex, endIndex + 1)
@@ -144,7 +142,6 @@ const MarkdownItGitHubAlerts1: MarkdownIt.PluginWithOptions<MarkdownItGitHubAler
 
         const slug = stringToSlug(firstContent.content);
 
-        // open.attrs = [['id', slug]];
         open.meta = {
           slug,
         };
@@ -421,9 +418,7 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
     }),
   );
 
-  const matterResult = matter(markdown);
-
-  const contentHtml = [md.render(matterResult.content)].join('\n').trim().replaceAll('\r\n', '\n');
+  const contentHtml = [md.render(markdown)].join('\n').trim().replaceAll('\r\n', '\n');
 
   return contentHtml;
 };

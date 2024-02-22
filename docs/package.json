@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "convert-markdown-to-html"
+    "build": "npx esno ../src/cli"
   },
   "keywords": [],
   "author": "hunghg255",

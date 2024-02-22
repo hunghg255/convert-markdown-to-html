@@ -1,6 +1,6 @@
 {
   "name": "convert-markdown-to-html",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -29,7 +29,7 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub",
-    "test:cli": "esno src/cli.ts --i docs/content.md --o docs/index.html --t \"Convert Markdown to HTML\" --g \"https://github.com/hunghg255/convert-markdown-to-html\" --ts true",
+    "test:cli": "esno src/cli.ts --i docs/index.md --o docs/index.html --t \"Convert Markdown to HTML\" --g \"https://github.com/hunghg255/convert-markdown-to-html\" --ts true",
     "lint": "eslint --ext .ts,.tsx src --color",
     "start": "esno src/markdown-to-docs.ts",
     "test": "vitest",
@@ -51,7 +51,6 @@
     "bumpp": "^9.3.0",
     "esno": "^0.16.3",
     "git-scm-hooks": "^0.0.7",
-    "gray-matter": "^4.0.3",
     "hast-util-from-html": "^2.0.1",
     "markdown-it": "^14.0.0",
     "markdown-it-abbr": "^2.0.0",

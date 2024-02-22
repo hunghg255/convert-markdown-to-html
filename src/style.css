@@ -891,11 +891,152 @@ tr:hover {
   display: block;
 }
 main {
-  max-width: 890px;
   margin: 0 auto;
   padding: 48px 22px;
 }
 
 .katex * {
   font-family: initial !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+header {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999999;
+  background-color: #171717;
+}
+
+header > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  margin: 0 auto;
+  max-width: 1140px;
+}
+
+header > div > a {
+  display: flex;
+  align-items: center;
+}
+
+header > div > a img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+header > div nav {
+  padding: 0;
+  margin: 0;
+}
+
+header > div ul a {
+  display: flex;
+  align-items: center;
+}
+
+header > div ul {
+  list-style: none;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+}
+
+header svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+main > div {
+  margin: 0 auto;
+  max-width: 1140px;
+  display: flex;
+}
+
+main .container {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 768px;
+}
+
+main .aside {
+  position: relative;
+  order: 2;
+  flex-grow: 1;
+  padding-left: 32px;
+  width: 100%;
+  max-width: 256px;
+}
+
+main .aside ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+main .aside .content {
+  border-left: 1px solid #333;
+  padding: 0 0 0 16px;
+}
+
+main .aside .content > div {
+  line-height: 32px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+main .aside .content a {
+  text-decoration: none !important;
+  margin: 0 0 8px;
+}
+
+main .aside > div {
+  position: fixed;
+  top: 0;
+  padding-top: 100px;
+  width: 224px;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+@media (max-width: 768px) {
+  main .aside {
+    display: none;
+  }
+}
+
+footer {
+  background-color: #171717;
+  border-top: 1px solid #333;
+  text-align: center;
+}
+
+footer > div {
+  padding: 16px;
+  margin: 0 auto;
+  max-width: 1140px;
+}
+
+footer p {
+  line-height: 24px;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(235, 235, 245, 0.6);
 }
