@@ -73,11 +73,44 @@ npm i convert-markdown-to-html@latest --save-dev
 import { defineConfig } from 'convert-markdown-to-html';
 
 export default defineConfig({
-  input: 'docs/content.md',
-  output: 'docs/index.html',
-  title: 'My Docs',
-  githubCornor: 'https://github.com',
+  input: 'index.md',
+  output: 'index.html',
   isTwoSlash: true,
+
+  title: 'My Docs',
+  description: 'My awesome documentation',
+
+  logo: '',
+
+  socialLinks: [
+    {
+      icon: 'twitter',
+      url: 'https://github.com',
+    },
+    {
+      icon: 'github',
+      url: 'https://github.com',
+    },
+  ],
+  footer: {
+    message: 'Released under the MIT License',
+    copyright: 'Copyright © 2023-present Hunghg255',
+  },
+
+  head: [
+    [
+      'link',
+      { rel: 'icon', type: 'image/png', href: 'https://hung.thedev.id/images/patak-banner.jpg' },
+    ],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: ogTitle }],
+    ['meta', { property: 'og:image', content: ogImage }],
+    ['meta', { property: 'og:url', content: ogUrl }],
+    ['meta', { property: 'og:description', content: ogDescription }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:site', content: '@hunghg255' }],
+    ['meta', { name: 'theme-color', content: '#7eaf90' }],
+  ],
 });
 ```
 
@@ -100,14 +133,60 @@ export default defineConfig({
 import { markdownToDocs } from 'convert-markdown-to-html';
 
 declare const markdownToDocs: (
-  markdown: string,
-  title: string,
-  githubCorner: string,
-  isTwoslash?: boolean,
+  isTwoSlash: boolean;
+  title: string;
+  description?: string;
+  logo?: string;
+  socialLinks?: {
+      icon?: 'twitter' | 'github';
+      url?: string;
+  }[];
+  footer?: {
+      message?: string;
+      copyright?: string;
+  };
+  head?: Array<[string, Record<string, string>]>;
 ) => Promise<string>;
 
 const markdownContent = `# Hello World`;
-const html = markdownToDocs(markdownContent, 'Hello World', 'https://github.com', false);
+const html = markdownToDocs(markdownContent, {
+  isTwoSlash: true,
+
+  title: 'My Docs',
+  description: 'My awesome documentation',
+
+  logo: '',
+
+  socialLinks: [
+    {
+      icon: 'twitter',
+      url: 'https://github.com',
+    },
+    {
+      icon: 'github',
+      url: 'https://github.com',
+    },
+  ],
+  footer: {
+    message: 'Released under the MIT License',
+    copyright: 'Copyright © 2023-present Hunghg255',
+  },
+
+  head: [
+    [
+      'link',
+      { rel: 'icon', type: 'image/png', href: 'https://hung.thedev.id/images/patak-banner.jpg' },
+    ],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: ogTitle }],
+    ['meta', { property: 'og:image', content: ogImage }],
+    ['meta', { property: 'og:url', content: ogUrl }],
+    ['meta', { property: 'og:description', content: ogDescription }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:site', content: '@hunghg255' }],
+    ['meta', { name: 'theme-color', content: '#7eaf90' }],
+  ],
+});
 ```
 
 ### About

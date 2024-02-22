@@ -1,5 +1,6 @@
 html {
   scroll-behavior: smooth;
+  scroll-padding: 70px;
 }
 
 header {
@@ -103,7 +104,39 @@ main .aside .content > div {
 
 main .aside .content a {
   text-decoration: none !important;
-  margin: 0 0 8px;
+  display: block;
+  line-height: 24px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(235, 235, 245, 0.6);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: color 0.5s;
+  position: relative;
+}
+
+main .aside .content a:hover {
+  color: var(--accent);
+}
+
+main .aside .content a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  left: -17px;
+  transition: all 0.5s;
+  opacity: 0;
+}
+
+main .aside .content a.is-active {
+  color: var(--accent);
+}
+
+main .aside .content a.is-active::before {
+  background-color: var(--accent);
+  opacity: 1;
 }
 
 main .aside > div {

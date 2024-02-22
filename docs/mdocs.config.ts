@@ -18,11 +18,11 @@ export default defineConfig({
   socialLinks: [
     {
       icon: 'twitter',
-      url: 'https://github.com',
+      url: 'https://twitter.com/hunghg255',
     },
     {
       icon: 'github',
-      url: 'https://github.com',
+      url: 'https://github.com/hunghg255/convert-markdown-to-html',
     },
   ],
   footer: {

@@ -31,7 +31,7 @@ export const markdownToDocs = async (
   markdown: string,
   options: Partial<TOptions>,
 ): Promise<string> => {
-  const { title, description, logo, isTwoSlash } = options;
+  const { title, description = '', logo, isTwoSlash } = options;
   const matterResult = await markdownToHtml(markdown, !!isTwoSlash);
 
   return `
@@ -41,19 +41,22 @@ export const markdownToDocs = async (
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title || 'Documentation'}</title>
-  <meta name="description" content="${description || ''}">
+  <meta name="description" content="${description || 'Documentation description'}">
 
-  ${options?.head
-    ?.map(([tag, attrs]) => {
-      return `<${tag} ${Object.keys(attrs)
-        .map((it) => {
-          return `${it}="${attrs[it]}"`;
-        })
-        .join(' ')} />`;
-    })
-    .join('')}
+  ${
+    options?.head?.length &&
+    options?.head
+      ?.map(([tag, attrs]) => {
+        return `<${tag} ${Object.keys(attrs)
+          .map((it) => {
+            return `${it}="${attrs[it]}"`;
+          })
+          .join(' ')} />`;
+      })
+      .join('')
+  }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/convert-markdown-to-html@0.0.32/dist/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/convert-markdown-to-html@0.0.33/dist/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-light.css">
 <link rel="stylesheet"
@@ -75,9 +78,15 @@ export const markdownToDocs = async (
 
     <nav>
       <ul>
-        ${options?.socialLinks
-          ?.map((link) => `<li><a href="${link.url}">${socialsIcon[`${link.icon}`]}</a></li>`)
-          .join('')}
+        ${
+          options?.socialLinks?.length &&
+          options?.socialLinks
+            ?.map(
+              (link) =>
+                `<li><a target="_blank" href="${link.url}">${socialsIcon[`${link.icon}`]}</a></li>`,
+            )
+            .join('')
+        }
       </ul>
     </nav>
     </div>
@@ -104,8 +113,8 @@ export const markdownToDocs = async (
 
   <footer>
     <div>
-    <p>${options?.footer?.message || ''}</p>
-    <p>${options?.footer?.copyright || ''}</p>
+      <p>${options?.footer?.message || 'Released under the MIT License'}</p>
+      <p>${options?.footer?.copyright || 'Copyright © present opensource'}</p>
     </div>
   </footer>
 
@@ -334,15 +343,38 @@ import { createTooltip, recomputeAllPoppers } from 'https://cdn.jsdelivr.net/npm
 <script>
 const asideContent = document.getElementById('asideContent');
 const headers = document.querySelectorAll('h2.heading-anchor');
+function updateLinks(visibleId, $links) {
+  $links.map(link => {
+    let href = link.getAttribute('href')
+    link.classList.remove('is-active')
+    if (href === visibleId) link.classList.add('is-active')
+  })
+}
 
-headers.forEach((header) => {
-  const id = header.id;
-  const text = header.textContent;
+if (headers.length) {
+  headers.forEach((header) => {
+    const id = header.id;
+    const text = header.textContent;
 
-  const li = document.createElement('li');
-  li.innerHTML = \`<a href="#\${id}">$\{text.slice(1)}</a>\`;
-  asideContent.appendChild(li);
-});
+    const li = document.createElement('li');
+    li.innerHTML = \`<a href="#\${id}">\${text.slice(1)}</a>\`;
+    asideContent.appendChild(li);
+  });
+
+  const $links = [...asideContent.querySelectorAll('a')]
+
+  const start = () => {
+    const visibleId = Array.from(headers).find(header => {
+      const rect = header.getBoundingClientRect()
+      return rect.top >= 20;
+    })?.id;
+
+    if (visibleId) updateLinks(\`#\${visibleId}\`, $links)
+  }
+
+  window.addEventListener('scroll', start)
+  start();
+}
 </script>
 </body>
 </html>
