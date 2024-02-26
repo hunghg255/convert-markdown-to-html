@@ -11,7 +11,7 @@ export default defineBuildConfig({
     cjsBridge: true,
     inlineDependencies: true,
     esbuild: {
-      minify: false,
+      minify: true,
     },
   },
   hooks: {
