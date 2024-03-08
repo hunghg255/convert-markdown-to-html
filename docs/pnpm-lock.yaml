@@ -23,8 +23,8 @@ dependencies:
 
 devDependencies:
   convert-markdown-to-html:
-    specifier: ^0.0.31
-    version: 0.0.31
+    specifier: ^0.0.36
+    version: 0.0.36
   typescript:
     specifier: ^5.3.3
     version: 5.3.3
@@ -383,8 +383,8 @@ packages:
     resolution: {integrity: sha512-7CEBgcMjVmitjYo5q8JTJVra6X5mQ20uTThdK+0kR7UEaDrAWEQcRiBtWJzga4eRpP6afNwwLsX2SET2JhVB1Q==}
     dev: false
 
-  /convert-markdown-to-html@0.0.31:
-    resolution: {integrity: sha512-+INW8wKV9PwKC7c6n2jLYjNJlQAr2wRT7SoFmFHmYDtv/A0d2dMKLWvscAP0hRsH16CHjawgpjwQN34Y/Kn6dQ==}
+  /convert-markdown-to-html@0.0.36:
+    resolution: {integrity: sha512-/b6fgJR6n5FQyVsAW8gHhwV20ODIdthadKVEUa+uIZW9ll6kW6DZP7oIqzFW427rQwEEYmF50cRF0DPtSVYdCQ==}
     hasBin: true
     dependencies:
       shikiji-themes: 0.0.2
