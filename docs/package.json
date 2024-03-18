@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx esno ../src/cli"
+    "build": "convert-markdown-to-html"
   },
   "keywords": [],
   "author": "hunghg255",
   "license": "ISC",
   "devDependencies": {
-    "convert-markdown-to-html": "^0.0.36",
+    "convert-markdown-to-html": "^0.0.37",
     "typescript": "^5.3.3"
   },
   "dependencies": {

@@ -198,6 +198,10 @@ const a: number = 2;
 > [!CAUTION]
 > Negative potential consequences of an action.
 
+- Mention
+
+{@hunghg255}
+
 - Katex
 
 | equation                                                                                                                                                                  | description                                                                            |

@@ -24,6 +24,7 @@ import MarkdownItFootnote from 'markdown-it-footnote';
 import MarkdownItGitHubAlerts from 'markdown-it-github-alerts';
 import MarkdownItIns from 'markdown-it-ins';
 import mila from 'markdown-it-link-attributes';
+import MarkdownItMagicLink from 'markdown-it-magic-link';
 import MarkdownItMark from 'markdown-it-mark';
 import MarkdownItTable from 'markdown-it-multimd-table';
 import MarkdownItKatex from 'md-it-katex';
@@ -318,6 +319,7 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
   md.use(MarkdownItFootnote);
   md.use(MarkdownItIns);
   md.use(MarkdownItMark);
+  md.use(MarkdownItMagicLink);
   md.use(MarkdownItTable, {
     multiline: false,
     rowspan: false,
