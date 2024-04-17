@@ -23,8 +23,8 @@ dependencies:
 
 devDependencies:
   convert-markdown-to-html:
-    specifier: ^0.0.38
-    version: 0.0.38
+    specifier: ^0.0.39
+    version: 0.0.39
   typescript:
     specifier: ^5.3.3
     version: 5.3.3
@@ -382,8 +382,8 @@ packages:
     resolution: {integrity: sha512-7CEBgcMjVmitjYo5q8JTJVra6X5mQ20uTThdK+0kR7UEaDrAWEQcRiBtWJzga4eRpP6afNwwLsX2SET2JhVB1Q==}
     dev: false
 
-  /convert-markdown-to-html@0.0.38:
-    resolution: {integrity: sha512-4qUY0JQypC/N9c6Q/tiREDOh+MXP/WvDfvDaVwzvNkJo29oELRlbRP8odjrZPPOSSS0igSFQe5c0mwO8xquRCg==}
+  /convert-markdown-to-html@0.0.39:
+    resolution: {integrity: sha512-EvAkA15mW60NY3RtV0zXs0ELCiVNDkHHAoTbaM1nTZYHJ7zaPyOkECt986MZJd2byjN4651TlSKbgC+LCjEvtw==}
     hasBin: true
     dependencies:
       markdown-it-magic-link: 0.1.4
