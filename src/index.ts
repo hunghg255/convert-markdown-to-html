@@ -56,16 +56,12 @@ export const markdownToDocs = async (
       .join('')
   }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/convert-markdown-to-html@0.0.39/dist/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/convert-markdown-to-html@0.5.0/dist/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-light.css">
 <link rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-colors-dark-media.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-github-alerts/styles/github-base.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-colors-light.css">
-<link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-colors-dark-media.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-code-group/styles/code-group-base.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/floating-ui@5.2.4/dist/style.css">
 
 </head>
@@ -164,78 +160,24 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
-  const eleCodeGroups = document.querySelectorAll('.markdown-code-group');
-
-  const removeCodeBlockClass = (el) => {
-    const codeBlocks = el.querySelectorAll('.code-blocks-group');
-    codeBlocks.forEach((el) => {
-      el.classList.remove('active');
-    });
-  };
-
-  const removeTabClass = (el) => {
-    const codeBlocks = el.querySelectorAll('.markdown-group-tab-item');
-    codeBlocks.forEach((el) => {
-      el.classList.remove('active');
-    });
-  };
-
-  const initCodeGroupActive = (el) => {
-    const tabActive = el.querySelector('.markdown-group-tab-item.active');
-    const dataCodeGroupActive = tabActive?.dataset.codeGroup;
-
-    const codeActive = el.querySelector(\`.code-blocks-group.\${dataCodeGroupActive}\`);
-
-    if (codeActive) {
-      codeActive.classList.add('active');
-    }
-  };
-
-  if (eleCodeGroups?.length) {
-    eleCodeGroups.forEach((el) => {
-      const btns = el.querySelectorAll('.markdown-group-tab-item');
-
-      initCodeGroupActive(el);
-
-      btns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const dataCodeGroup = btn.dataset.codeGroup;
-
-          removeCodeBlockClass(el);
-          removeTabClass(el);
-
-          const code = el.querySelector(\`.code-blocks-group.\${dataCodeGroup}\`);
-          code.classList.add('active');
-          btn.classList.add('active');
-        });
-      });
-    });
-  }
-
-
-
 }, false);
 </script>
 
 <script type="module" defer>
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+  import { markdownItDiagramDom } from 'https://cdn.jsdelivr.net/npm/markdown-diagrams@0.0.3/dist/dom/index.mjs';
 
-  const mermaidElement = document.querySelectorAll('.markdown-it-mermaid');
+  const init = async () => {
+    mermaid.initialize({ startOnLoad: false, theme: 'light' });
+    await mermaid.run();
+    await markdownItDiagramDom();
+  }
 
-      if (mermaidElement?.length) {
-        mermaidElement.forEach(async (el) => {
-          const content = el?.textContent;
-          if (content) {
-            const type = mermaid.detectType(content);
-            const { svg } = await mermaid.render(type, content);
-            el.innerHTML = svg;
-            el.classList.remove('opacity-0');
-          }
-        });
-      }
+  setTimeout(() => {
+    init();
+  }, 0);
 </script>
+
 <script type="module" defer>
 import { createTooltip, recomputeAllPoppers } from 'https://cdn.jsdelivr.net/npm/floating-ui@5.2.4/dist/floating-ui.mjs';
 
@@ -376,6 +318,14 @@ if (headers.length) {
   start();
 }
 </script>
+
+  <script type="module" defer>
+    import { markdownItCodeGroupDom } from 'https://cdn.jsdelivr.net/npm/markdown-it-code-group@0.0.9/dist/dom/index.mjs';
+
+    setTimeout(() => {
+      markdownItCodeGroupDom();
+    }, 0);
+  </script>
 </body>
 </html>
 `;

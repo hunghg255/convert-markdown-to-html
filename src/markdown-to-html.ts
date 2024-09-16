@@ -14,6 +14,7 @@ import {
 } from '@shikijs/transformers';
 import { rendererRich, transformerTwoslash } from '@shikijs/twoslash';
 import { fromHtml } from 'hast-util-from-html';
+import MarkdownItDiagrams from 'markdown-diagrams';
 import MarkdownIt from 'markdown-it';
 import MarkdownItAbbr from 'markdown-it-abbr';
 import MarkdownItCodeGroup from 'markdown-it-code-group';
@@ -91,28 +92,6 @@ function renderCode(md, origRule) {
   </div>
 </div>
 `;
-  };
-}
-
-function renderCodeMermaid(md, origRule) {
-  return (...args) => {
-    const [tokens, idx] = args;
-    const content = tokens[idx].content.replaceAll('"', '&quot;').replaceAll("'", '&apos;');
-    const info = tokens[idx].info ? md.utils.escapeHtml(tokens[idx].info) : '';
-
-    const langName = info.split(/\s+/g)[0];
-
-    const origRendered = origRule(...args);
-
-    if (content.length === 0) {
-      return origRendered;
-    }
-
-    if (langName !== 'mermaid') {
-      return origRendered;
-    }
-
-    return `<div class="markdown-it-mermaid opacity-0">${origRendered}</div>`;
   };
 }
 
@@ -320,6 +299,21 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
   md.use(MarkdownItIns);
   md.use(MarkdownItMark);
   md.use(MarkdownItMagicLink);
+  md.use(MarkdownItDiagrams, {
+    showController: true, // show controller,default:false
+    /**
+     * PlantUML options
+     * ditaa:imageFormat 'png| txt'
+     * plantuml: imageFormat'png| svg| txt'
+     * dot: imageFormat'png| svg| txt'
+     */
+    // imageFormat: 'svg', // image format:svg|png|txt,default:svg
+    // server: '', // plantuml server,default:http://www.plantuml.com/plantuml
+    // ditaa: {
+    // imageFormat: 'svg', // image format:png|txt,default:svg
+    // server: '', // plantuml server,default:http://www.plantuml.com/plantuml
+    // }
+  });
   md.use(MarkdownItTable, {
     multiline: false,
     rowspan: false,
@@ -330,10 +324,6 @@ export const markdownToHtml = async (markdown: string, isTwoSlash: boolean): str
   md.use((md, options) => {
     md.renderer.rules.code_block = renderCode(md, md.renderer.rules.code_block, options);
     md.renderer.rules.fence = renderCode(md, md.renderer.rules.fence, options);
-  });
-  md.use((md, options) => {
-    md.renderer.rules.code_block = renderCodeMermaid(md, md.renderer.rules.code_block, options);
-    md.renderer.rules.fence = renderCodeMermaid(md, md.renderer.rules.fence, options);
   });
 
   md.use(mila, {

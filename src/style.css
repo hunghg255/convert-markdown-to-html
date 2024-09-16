@@ -1161,3 +1161,8 @@ footer p {
     transition: all 0.8s;
   }
 }
+
+div[data-controll-panel-container] {
+  background-color: #fff;
+  margin: 10px 0
+}

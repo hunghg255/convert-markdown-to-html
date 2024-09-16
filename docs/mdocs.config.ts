@@ -1,4 +1,4 @@
-import { defineConfig } from '../src/index';
+import { defineConfig } from 'convert-markdown-to-html';
 
 const ogDescription = 'Tiny blog, talks, and projects';
 const ogImage = 'https://hung.thedev.id/og-image.png';

@@ -46,6 +46,9 @@ devDependencies:
   hast-util-from-html:
     specifier: ^2.0.1
     version: 2.0.1
+  markdown-diagrams:
+    specifier: ^0.0.3
+    version: 0.0.3(@types/markdown-it@13.0.7)(markdown-it@14.0.0)
   markdown-it:
     specifier: ^14.0.0
     version: 14.0.0
@@ -978,6 +981,7 @@ packages:
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
     dependencies:
       '@humanwhocodes/object-schema': 2.0.2
       debug: 4.3.4
@@ -993,6 +997,7 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
+    deprecated: Use @eslint/object-schema instead
     dev: true
 
   /@hunghg255/eslint-config-ts@0.0.8(eslint@8.56.0)(typescript@5.3.3):
@@ -3509,6 +3514,7 @@ packages:
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -4131,6 +4137,16 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
+
+  /markdown-diagrams@0.0.3(@types/markdown-it@13.0.7)(markdown-it@14.0.0):
+    resolution: {integrity: sha512-nDcBRM/7/hK/6LS3NBVrFT0i4VLTm0OqheLFE0Sj3aXBoEch4FpC9Rj2kGy5KT0YAKDo1AOTketkc443SlJxGg==}
+    peerDependencies:
+      '@types/markdown-it': '*'
+      markdown-it: ^14.0.0
+    dependencies:
+      '@types/markdown-it': 13.0.7
+      markdown-it: 14.0.0
     dev: true
 
   /markdown-it-abbr@2.0.0:
@@ -5658,6 +5674,7 @@ packages:
 
   /rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
     dependencies:
       glob: 7.2.3
